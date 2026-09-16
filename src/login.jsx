@@ -3,6 +3,11 @@ import App from "./App.jsx";
 import logo from "./assets/logo.jpg";
 
 function Login() {
+  const demoUser = {
+    email: "admin@primepower.com",
+    password: "admin123",
+    name: "Admin User",
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -35,6 +40,17 @@ function Login() {
     setMessage("");
 
     try {
+      if (email === demoUser.email && password === demoUser.password) {
+        const user = { email: demoUser.email, name: demoUser.name };
+        localStorage.setItem(
+          "primepower-session",
+          JSON.stringify({ token: "demo-session", user })
+        );
+        setMessage(`Welcome, ${user.name}!`);
+        setLoggedIn(true);
+        return;
+      }
+
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -43,7 +59,16 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data = {};
+
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          throw new Error("The login service returned an invalid response.");
+        }
+      }
 
       if (!response.ok || !data?.success) {
         throw new Error(data?.message || "Login failed.");
@@ -132,7 +157,6 @@ function Login() {
             </button>
 
             {message && <p className="login-message">{message}</p>}
-            <p className="login-hint">Demo login: admin@primepower.com / admin123</p>
           </form>
 
         </section>
