@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import App from "./App.jsx";
 import logo from "./assets/logo.jpg";
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 function Login() {
   const demoUser = {
     email: "admin@primepower.com",
@@ -51,7 +53,7 @@ function Login() {
         return;
       }
 
-      const response = await fetch("/api/login", {
+      const response = await fetch(`${API_BASE}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

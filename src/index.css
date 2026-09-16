@@ -1511,6 +1511,30 @@ tbody tr:hover {
   font-size: 12px;
 }
 
+.ai-budget-main {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ai-suggestions {
+  margin: 14px 0 0 0;
+  padding-left: 18px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ai-suggestions li {
+  color: #344e5e;
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  overflow-wrap: break-word;
+}
+
+.ai-suggestions li:last-child {
+  margin-bottom: 0;
+}
+
 .report-lines {
   margin-top: 15px;
 }
@@ -2095,6 +2119,24 @@ tbody tr:hover {
 
   .allocation-card {
     min-height: auto;
+  }
+
+  .ai-budget-card {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-live-panel {
+    border-left: 0;
+    border-top: 1px solid var(--border-light);
+    padding-left: 0;
+    padding-top: 14px;
+  }
+
+  .live-flow-panel {
+    border-left: 0;
+    border-top: 1px solid var(--border-light);
+    padding-left: 0;
+    padding-top: 14px;
   }
 }
 

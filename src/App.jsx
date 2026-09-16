@@ -32,6 +32,8 @@ import {
   Lock,
 } from "lucide-react";
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 const money = (value) => new Intl.NumberFormat("en-PH", {
 
   style: "currency", currency: "PHP", maximumFractionDigits: 0,
@@ -192,7 +194,7 @@ const loadFinanceData = async () => {
   const fallback = defaultFinanceState;
 
   try {
-    const response = await fetch("/api/state", { headers: { Accept: "application/json" } });
+    const response = await fetch(`${API_BASE}/api/state`, { headers: { Accept: "application/json" } });
     if (!response.ok) {
       return fallback;
     }
@@ -218,7 +220,7 @@ const loadFinanceData = async () => {
 
 const persistFinanceData = async (payload) => {
   try {
-    await fetch("/api/state", {
+    await fetch(`${API_BASE}/api/state`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -261,7 +263,7 @@ function App() {
       setPermissions(data.permissions);
     });
 
-    fetch("/api/ai-budget", {
+    fetch(`${API_BASE}/api/ai-budget`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
