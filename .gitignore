@@ -1,1 +1,5 @@
 node_modules
+.env
+.mcp.json
+deploy_screenshots/
+downloaded_files/
