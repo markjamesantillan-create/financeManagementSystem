@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-ARG VITE_API_URL
+ARG VITE_API_URL=https://fmb-fmst.hostforgeplatforms.com
 ENV VITE_API_URL=$VITE_API_URL
 RUN node node_modules/vite/bin/vite.js build
 
