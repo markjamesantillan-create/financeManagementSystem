@@ -1,0 +1,154 @@
+/* The card. Sized to the reference: 246px tall, of which a 53px header and a 193px plot, so the
+   chart reads wide and low rather than filling the column.
+
+   NOTE ON THE ROW IT SITS IN: .dashboard-grid-new pairs this card with .allocation-card, which
+   is `min-height: 330px`, so on a wide screen the row is 330px tall and this card's fixed 246px
+   leaves an ~84px band of page background under it. A taller card (or a min-height instead of a
+   height) is what closes that gap; the height is left as specified because the low profile is
+   the point of this card. */
+.monthly-financial-overview {
+  width: 100%;
+  height: 246px;
+
+  box-sizing: border-box;
+
+  background: #fafdff;
+
+  border: 1px solid #dce8ee;
+  border-radius: 7px;
+
+  overflow: hidden;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.monthly-overview-header {
+  height: 53px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px 0 14px;
+}
+
+.monthly-overview-heading h2 {
+  margin: 0;
+
+  color: #38566a;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  line-height: 16px;
+}
+
+.monthly-overview-heading p {
+  margin: 2px 0 0;
+
+  color: #8a9aa5;
+
+  font-size: 8px;
+  font-weight: 400;
+
+  line-height: 12px;
+}
+
+/* =========================================
+   YTD
+========================================= */
+
+.ytd-growth {
+  margin-top: 2px;
+
+  padding: 4px 6px;
+
+  border-radius: 4px;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.growth-positive {
+  color: #19966d;
+  background: #edf9f4;
+}
+
+.growth-negative {
+  color: #d65e5e;
+  background: #fff1f1;
+}
+
+.growth-arrow {
+  font-size: 7px;
+  margin-right: 2px;
+}
+
+/* =========================================
+   CHART
+========================================= */
+
+.monthly-overview-chart {
+  width: 100%;
+  height: 193px;
+
+  box-sizing: border-box;
+
+  padding: 0 5px 0 3px;
+}
+
+.chart-message {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #899aa5;
+
+  font-size: 10px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .monthly-financial-overview {
+    height: 260px;
+  }
+
+  .monthly-overview-header {
+    height: 55px;
+  }
+
+  .monthly-overview-chart {
+    height: 205px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .monthly-overview-heading h2 {
+    font-size: 12px;
+  }
+
+  .monthly-overview-heading p {
+    font-size: 7px;
+  }
+
+  .ytd-growth {
+    font-size: 7px;
+  }
+
+}

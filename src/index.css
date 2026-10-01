@@ -1,4 +1,5 @@
-/* =========================================================
+
+/* ============================================================
    PRIMEPOWER FINANCE MANAGEMENT
    Screenshot-style light dashboard theme
    ========================================================= */
@@ -120,8 +121,7 @@ body {
   font-size: 14px;
   font-weight: 800;
   color: #d33c3c;
-  letter-spacing: 0.2px;
-}
+  }
 
 .brand span {
   display: block;
@@ -160,7 +160,6 @@ body {
   color: #0788C2;
   font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -522,8 +521,7 @@ body {
   color: #8295a2;
   font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.5px;
-}
+  }
 
 .stat-icon {
   width: 28px;
@@ -623,8 +621,7 @@ body {
   color: #526b7b;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.35px;
-}
+  }
 
 .ai-budget-card {
   grid-column: span 3;
@@ -639,8 +636,11 @@ body {
 }
 
 .live-flow-panel {
-  border-left: 1px solid var(--border-light);
-  padding-left: 18px;
+  min-height: 260px;
+  padding: 14px 16px;
+  border: 1px solid #e1ebf2;
+  border-radius: 8px;
+  background: #f7fbfe;
 }
 
 .ai-live-heading {
@@ -727,44 +727,50 @@ body {
 }
 
 .live-flow-heading span {
-  color: #526b7b;
-  font-size: 10px;
+  color: #3c5768;
+  font-size: 11px;
   font-weight: 800;
+  letter-spacing: 0.1px;
 }
 
 .live-flow-heading small {
   color: var(--green);
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 800;
+  letter-spacing: 0.6px;
 }
 
+/* height:auto lets the 360x150 viewBox scale to whatever width the panel has. The old
+   fixed 145px box letterboxed the drawing instead, shrinking the plot and leaving dead
+   bands above and below it once the aspect ratios stopped matching. */
 .live-flow-graph svg {
   display: block;
   width: 100%;
-  height: 145px;
-  margin-top: 5px;
+  height: auto;
+  margin-top: 14px;
 }
 
 .live-grid-line {
-  stroke: #e4edf2;
-  stroke-dasharray: 3 3;
+  stroke: #e6eef4;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
 }
 
 .flow-bar {
-  fill: #a9c9f4;
-  opacity: 0.8;
-  transition: fill 0.25s ease, opacity 0.25s ease;
+  fill: #b6d2f6;
+  transition: fill 0.25s ease;
 }
 
 .flow-bar.active {
   fill: #2c78df;
-  opacity: 1;
 }
 
 .flow-line {
   fill: none;
   stroke: #12a66b;
   stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
@@ -774,20 +780,24 @@ body {
   stroke-width: 1.5;
 }
 
+/* The live month reads as a larger solid marker with a fatter white halo, so it stays
+   legible where it sits on top of its own bar. */
 .flow-point.active {
-  fill: #ffffff;
-  stroke: #12a66b;
+  fill: #12a66b;
+  stroke: #ffffff;
   stroke-width: 2.5;
 }
 
 .flow-label {
   fill: #8b9ca7;
   font-size: 8px;
+  font-weight: 600;
 }
 
 .live-flow-legend {
   justify-content: flex-start;
-  gap: 14px;
+  gap: 16px;
+  margin-top: 12px;
   color: #718592;
   font-size: 8px;
 }
@@ -795,7 +805,7 @@ body {
 .live-flow-legend span {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .live-flow-legend i {
@@ -805,12 +815,17 @@ body {
 }
 
 .bar-key {
+  width: 9px;
+  height: 9px;
   border-radius: 2px;
   background: #2c78df;
 }
 
+/* A short dash rather than a square, so the key reads as a line the way the chart does. */
 .line-key {
-  height: 2px !important;
+  width: 13px;
+  height: 2px;
+  border-radius: 1px;
   background: #12a66b;
 }
 
@@ -824,8 +839,7 @@ body {
   color: #526b7b;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.2px;
-}
+  }
 
 .ai-live-chart .financial-chart {
   height: 145px;
@@ -915,6 +929,16 @@ body {
   padding: 15px;
 }
 
+/* The Monthly Financial Overview card on a lighter ground. `.card` paints `--card`
+   (#f4faff), which sits a touch heavy underneath the three shaded ribbons; white leaves
+   the lines, the dashed grid and the axis labels exactly as they are and only lifts the
+   ground they rest on. Scoped to this one card on purpose: `.allocation-card` is the row
+   partner and keeps its current tint, and `--card` in :root would move every card in the
+   app. Declared after `.card` so it wins on order at equal specificity. */
+.chart-card {
+  background: #ffffff;
+}
+
 .card-heading {
   display: flex;
   align-items: flex-start;
@@ -941,6 +965,13 @@ body {
   color: #159b69;
   font-size: 8px;
   font-weight: 800;
+}
+
+/* Negative year-over-year revenue growth. The pill carries a real computed figure now, so
+   it can point down as well as up. */
+.growth-pill.down {
+  background: #fdecec;
+  color: #c0392b;
 }
 
 /* =========================================================
@@ -1011,6 +1042,25 @@ body {
   stroke: #16a56a;
 }
 
+/* Area fills. Each ribbon is its smooth curve closed down to the baseline, drawn under
+   the lines. Flat tints rather than gradients, so the three read as bands of different
+   weight and can be tuned here alone. */
+
+.revenue-area {
+  fill: #2c78df;
+  opacity: 0.10;
+}
+
+.expense-area {
+  fill: #e65757;
+  opacity: 0.045;
+}
+
+.profit-area {
+  fill: #16a56a;
+  opacity: 0.04;
+}
+
 /* Hover guide line */
 
 .hover-line {
@@ -1025,6 +1075,7 @@ body {
 .hover-dot {
   stroke: #ffffff;
   stroke-width: 2;
+  vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
@@ -1040,94 +1091,87 @@ body {
   fill: #16a56a;
 }
 
-/* Hover tooltip */
+/* Hover tooltip. The wider .tooltip-title / .tooltip-row rules this used to carry are
+   gone: this card's readout is the only thing on the page that uses them, and the month
+   chart is the smaller, tighter box the reference shows. */
 
 .financial-tooltip {
   position: absolute;
-  top: 8px;
+  top: 12px;
   transform: translateX(-50%);
-  min-width: 210px;
-  padding: 11px 13px;
+  min-width: 125px;
+  padding: 8px 10px;
   background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  box-shadow: 0 7px 22px rgba(40, 90, 115, 0.14);
-  z-index: 30;
+  border: 1px solid #dce7ed;
+  border-radius: 6px;
+  box-shadow: 0 5px 18px rgba(40, 70, 90, 0.10);
+  z-index: 10;
+  color: #526b7b;
+  font-size: 8px;
   pointer-events: none;
 }
 
-.tooltip-title {
-  padding-bottom: 8px;
-  margin-bottom: 6px;
-  color: #294354;
-  border-bottom: 1px solid var(--border-light);
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.tooltip-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2px 10px;
-  padding: 5px 0;
-}
-
-.tooltip-row span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #667e8c;
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.tooltip-row span i {
-  width: 7px;
-  height: 7px;
-  display: inline-block;
-  border-radius: 50%;
-}
-
-.tooltip-row strong {
-  color: #294354;
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.tooltip-row small {
-  grid-column: 1 / -1;
-  margin-left: 13px;
-  color: #8a9ca8;
+.financial-tooltip strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #314b5c;
   font-size: 9px;
 }
 
-.tooltip-row.revenue i {
+.financial-tooltip div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.financial-tooltip b {
+  margin-left: auto;
+  color: #314b5c;
+}
+
+.financial-tooltip i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tooltip-blue {
   background: #2c78df;
 }
 
-.tooltip-row.expense i {
+.tooltip-red {
   background: #e65757;
 }
 
-.tooltip-row.profit i {
+.tooltip-green {
   background: #16a56a;
 }
+
+/* The month band. It is exactly the 26px the .chart-svg and .grid-bg rules above leave
+   out of the plot, so the labels sit below the baseline rather than over it, and they
+   lean -12deg off the horizontal -- shallow enough to read at 7px. Note this band is
+   shared: .ai-live-chart below keeps its own 6px size and -25deg lean. */
 
 .x-labels {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
+  height: 26px;
   display: flex;
   justify-content: space-between;
-  color: #8a9ca8;
-  font-size: 8px;
+  align-items: flex-end;
+  color: #91a2ad;
+  font-size: 7px;
+  pointer-events: none;
 }
 
 .x-labels span {
   white-space: nowrap;
-  transform: rotate(-20deg);
-  transform-origin: center;
+  transform: rotate(-12deg);
+  transform-origin: center bottom;
 }
 
 /* =========================================================
@@ -1284,7 +1328,6 @@ th {
   font-size: 8px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.35px;
   text-align: left;
   white-space: nowrap;
 }
@@ -1440,6 +1483,12 @@ tbody tr:hover {
   cursor: pointer;
   font-size: 9px;
   font-weight: 700;
+  /* These buttons carry a lucide glyph beside their label (e.g. "Print / Save
+     PDF"). Without flex the SVG sat inline and butted straight against the text
+     with no space, and the glyph sat on the text baseline rather than centred. */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .light-button {
@@ -1941,7 +1990,6 @@ tbody tr:hover {
   color: #bceff9;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 2px;
   text-transform: uppercase;
 }
 
@@ -1970,7 +2018,6 @@ tbody tr:hover {
   color: #d8f8ff;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -2011,7 +2058,7 @@ tbody tr:hover {
   color: var(--primary);
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  
   text-transform: uppercase;
 }
 
@@ -2073,7 +2120,6 @@ tbody tr:hover {
   color: #ffffff;
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.8px;
   cursor: pointer;
   margin-top: 18px;
   transition: background 0.2s ease, transform 0.2s ease;
@@ -2133,10 +2179,8 @@ tbody tr:hover {
   }
 
   .live-flow-panel {
-    border-left: 0;
-    border-top: 1px solid var(--border-light);
-    padding-left: 0;
-    padding-top: 14px;
+    border: 1px solid #e1ebf2;
+    padding: 14px 16px;
   }
 }
 
@@ -2179,10 +2223,8 @@ tbody tr:hover {
   }
 
   .live-flow-panel {
-    border-left: 0;
-    border-top: 1px solid var(--border-light);
-    padding-left: 0;
-    padding-top: 14px;
+    border: 1px solid #e1ebf2;
+    padding: 14px 16px;
   }
 
   .report-grid {
@@ -2283,6 +2325,14 @@ tbody tr:hover {
 
 .contract-alert svg {
   flex: 0 0 auto;
+}
+
+/* Informational variant (loading / progress notes) — neutral blue so a normal
+   loading message is never mistaken for the amber error/warning alert. */
+.contract-alert--info {
+  border-color: #b9ddf1;
+  background: #eef7fd;
+  color: #1f6ea8;
 }
 
 .expiration-warning {
@@ -2541,6 +2591,10 @@ tbody tr:hover {
   background: #eaf9fd;
 }
 
+.vendor-summary-card[role="button"] {
+  cursor: pointer;
+}
+
 .vendor-summary-label {
   display: block;
   font-size: 11px;
@@ -2679,6 +2733,856 @@ tbody tr:hover {
   font-size: 9px;
   color: #203a4e;
   text-align: right;
+}
+
+/* ============================================================
+   Supplier Payment Management (data-driven)
+   The record count under each card. A peso figure on its own hides how few
+   records it is made of, which is what made the old cards unreadable.
+   ============================================================ */
+
+.vendor-summary-count {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  color: #718697;
+}
+
+.vendor-record-heading .vendor-summary-count {
+  margin-top: 0;
+  font-size: 10px;
+}
+
+/* Row action cell: the "More" button opens a menu instead of stacking six
+   icons into the row. position:relative anchors the menu to its own row so
+   overlapping menus cannot cover the wrong record. */
+.row-actions .sp-more {
+  position: relative;
+  display: inline-flex;
+}
+
+.sp-more-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  min-width: 108px;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid #cbdde8;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(16, 42, 67, 0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Menu items are text commands, not the square icon buttons used in the row, so
+   they get their own full-width hit area. */
+.sp-more-menu button {
+  width: 100%;
+  display: block;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #203a4e;
+  font-size: 11px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sp-more-menu button:hover:not(:disabled) {
+  background: #f0f9fc;
+  color: #159bd3;
+}
+
+.sp-more-menu button:disabled {
+  color: #a9bcc9;
+  cursor: not-allowed;
+}
+
+.sp-more-menu button.danger:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Action buttons disable only while a save is in flight, so a record that cannot
+   be paid or approved stays clickable and explains itself on click. A permanently
+   greyed button is indistinguishable from a broken one. */
+.row-actions button:disabled {
+  opacity: 0.4;
+  cursor: wait;
+}
+
+/* .sp-blocked marks an action that is not applicable to this record (already paid,
+   nothing left to pay). It is dimmed to signal "not now" but keeps pointer events
+   so clicking still returns the reason instead of doing nothing. */
+.row-actions button.sp-blocked {
+  opacity: 0.45;
+  color: #8fa3b1;
+  cursor: help;
+}
+
+.row-actions button.sp-blocked:hover {
+  opacity: 0.75;
+  border-color: #9db4c4;
+  background: #f4f8fa;
+}
+
+/* Supplier Payment detail panel — the three peso figures (Amount, Paid Amount,
+   Remaining Balance) start as "*" and each reveals on its own click.
+   The asterisk is inline-styled to sit at the same right edge as the revealed
+   peso figure, so the value does not jump when it is toggled. */
+.vendor-detail-list b .masked-amount {
+  /* Black, matching the other figures in this panel. It inherited the dark navy
+     #203a4e from .vendor-detail-list b, which read as grey against the "*". */
+  color: #000;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  min-width: 1.4em;
+  text-align: right;
+  transition: opacity 0.15s ease;
+}
+
+.vendor-detail-list b .masked-amount:hover {
+  opacity: 0.7;
+}
+
+/* Keeps the status badge and the Reveal button together at the right edge of the
+   detail header (the header itself is space-between, so a third flex child would
+   otherwise land in the middle of the row). */
+.sp-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sp-reveal-all {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 5px 12px;
+}
+
+/* Utility Payment Management — the date-range inputs reuse .vendor-select so
+   they line up with the status dropdown, but a date input needs a fixed width
+   or the browser's intrinsic size pushes the toolbar around. */
+.vendor-select.up-date {
+  width: 148px;
+  font-family: inherit;
+  color: #203a4e;
+}
+
+/* Payable card totals (Supplier Payment + Utility Payment) start as "*" and each
+   reveals on its own click.
+   While masked the asterisk is black; once revealed the card's own status colour
+   (blue/orange/green/red) takes over, so the figure reads as a real total. */
+.vendor-summary-amount.payable-card-amount {
+  color: #000;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  min-width: 1.4em;
+  transition: opacity 0.15s ease;
+}
+
+.vendor-summary-amount.payable-card-amount:hover {
+  opacity: 0.7;
+}
+
+.vendor-summary-amount.payable-card-amount.is-open.total-supplies-amount { color: #0d6efd; }
+.vendor-summary-amount.payable-card-amount.is-open.pending-amount { color: #d99518; }
+.vendor-summary-amount.payable-card-amount.is-open.paid-amount { color: #159b69; }
+.vendor-summary-amount.payable-card-amount.is-open.overdue-amount { color: #e45757; }
+
+/* Payable table Amount cells (Supplier Payment + Utility Payment).
+   Left-aligned, like every other data column on these tables, so the masked "*"
+   and the revealed peso figure share one left edge and sit clear of DUE DATE.
+   Right-aligning them butted the asterisk against the next column's date with
+   only the 11px cell padding between them, which read as two touching numbers.
+
+   The width is reserved on the header rather than the body cells: a min-width on
+   a td only reserves room while that cell is masked, so the column resized every
+   time a cell was revealed and slid the other asterisks sideways. The header is
+   always present, so it pins the column to one width in both states.
+
+   Width is in px, NOT em: em resolves against the element's OWN font-size, and
+   th is 8px (uppercase label) while the td figures are 10px, so an em value here
+   reserved a different width than the number it holds. 88px covers
+   "₱63,000.00" at 10px plus 11px padding on each side, leaving the figure clear
+   of DUE DATE. box-sizing is border-box, so the padding is included. */
+.vendor-payment-page .money-cell {
+  text-align: left;
+}
+
+.vendor-payment-page th.money-cell {
+  text-align: left;
+  min-width: 88px;
+}
+
+.money-cell.masked-amount {
+  /* Black asterisk, matching the other masked figures. Cursor/user-select/hover
+     come from the shared .money-cell.masked-amount rules further down. */
+  color: #000;
+}
+
+/* Office Expense status badges. The class is chosen from the status the API
+   returned (see oeStatusClass in App.jsx), so a status that changes in the
+   database changes colour with no edit here. An unknown status falls back to
+   .oe-none rather than inheriting an unrelated status's colour.
+
+   The four documented groups are budget, approval, payment and verification, and
+   the three budget bands carry the green / amber / red the process calls for. */
+.oe-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Budget status */
+.oe-within-budget { background: #e6f6ed; color: #15803d; }
+.oe-near-budget { background: #fdf3d8; color: #b45309; }
+.oe-over-budget { background: #fdeaea; color: #b91c1c; }
+
+/* Approval status */
+.oe-draft { background: #eef2f5; color: #64748b; }
+.oe-submitted { background: #e4eefb; color: #1d4ed8; }
+.oe-under-review { background: #fdf3d8; color: #b45309; }
+.oe-approved { background: #e6f6ed; color: #15803d; }
+.oe-rejected { background: #fdeaea; color: #b91c1c; }
+.oe-cancelled { background: #e7e5e4; color: #44403c; }
+
+/* Payment status */
+.oe-for-payment { background: #fdeedd; color: #c2570a; }
+.oe-paid { background: #e6f6ed; color: #15803d; }
+.oe-payment-failed { background: #fdeaea; color: #b91c1c; }
+
+/* Verification status */
+.oe-pending-verification { background: #fdf3d8; color: #b45309; }
+.oe-verified { background: #e4eefb; color: #1d4ed8; }
+
+/* The "—" the API returns for a status that does not apply yet. */
+.oe-none { background: transparent; color: #9aa8b2; font-weight: 600; }
+
+/* Card amounts. Each card keeps a distinct tone so a revealed figure is
+   identifiable by colour, matching the other payable modules. */
+.vendor-summary-amount.approved-amount.is-open { color: #1d4ed8; }
+.vendor-summary-amount.for-payment-amount.is-open { color: #c2570a; }
+.vendor-summary-amount.pending-verification-amount.is-open { color: #b45309; }
+.vendor-summary-amount.remaining-budget-amount.is-open { color: #0f766e; }
+
+/* Vendor Payment status badges. The class is chosen from the status the API
+   returned (see vpStatusClass in App.jsx), so a status that changes in the database
+   changes colour with no edit here. An unknown status falls back to .vp-neutral
+   rather than inheriting an unrelated status's colour. */
+.vp-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Payment status */
+.vp-paid { background: #e6f6ed; color: #15803d; }
+.vp-verified { background: #e0f2fe; color: #0369a1; }
+.vp-scheduled { background: #ede9fe; color: #6d28d9; }
+.vp-processing { background: #f3e8ff; color: #7e22ce; }
+.vp-pending { background: #fdf3d8; color: #b45309; }
+.vp-overdue { background: #fdeaea; color: #b91c1c; }
+.vp-failed { background: #fdeaea; color: #b91c1c; }
+.vp-cancelled { background: #e7e5e4; color: #44403c; }
+
+/* Approval status */
+.vp-approved { background: #e6f6ed; color: #15803d; }
+.vp-on-hold { background: #fdeedd; color: #c2570a; }
+.vp-rejected { background: #fdeaea; color: #b91c1c; }
+.vp-neutral { background: transparent; color: #9aa8b2; font-weight: 600; }
+
+/* Due status. The deeper the bucket, the hotter the colour, so an aging list can be
+   triaged by eye without reading the label. */
+.vp-age {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.vp-age-due { background: #fdf3d8; color: #b45309; }
+.vp-age-soon { background: #e0f2fe; color: #0369a1; }
+.vp-age-later { background: #eef2f5; color: #64748b; }
+.vp-age-od1 { background: #fdeedd; color: #c2570a; }
+.vp-age-od2 { background: #fdeaea; color: #b91c1c; }
+.vp-age-od3 { background: #b91c1c; color: #fff; }
+
+/* Detail tabs */
+.vp-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.vp-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #718697;
+  cursor: pointer;
+}
+.vp-tab:hover { color: #158fc3; }
+.vp-tab.active { color: #158fc3; border-bottom-color: #158fc3; }
+.vp-tab-count {
+  background: #e4eefb;
+  color: #1d4ed8;
+  border-radius: 8px;
+  padding: 1px 5px;
+  font-size: 8px;
+  font-weight: 800;
+}
+.vp-detail-sub { margin: 3px 0 0; font-size: 9px; color: #718697; }
+
+/* Activity timeline. The connecting line is drawn on the item, not a separate
+   element, so the last entry does not leave a dangling rule. */
+.vp-timeline-block { grid-column: 1 / -1; }
+.vp-timeline { position: relative; padding-left: 4px; }
+.vp-timeline-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0 12px;
+  border-left: 2px solid #e4eefb;
+  margin-left: 5px;
+  padding-left: 18px;
+  position: relative;
+}
+.vp-timeline-item:last-child { border-left-color: transparent; }
+.vp-timeline-dot {
+  position: absolute;
+  left: -6px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #158fc3;
+  border: 2px solid #fff;
+}
+.vp-timeline-item strong { display: block; font-size: 10px; color: #203a4e; }
+.vp-timeline-item p { margin: 2px 0; font-size: 9px; color: #637987; }
+.vp-timeline-item small { font-size: 8px; color: #8fa0ad; }
+
+/* Intake wizard */
+.vp-intake { max-width: 720px; }
+.vp-steps {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0 0 12px;
+  margin: 0 0 12px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.vp-steps li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8px;
+  font-weight: 700;
+  color: #8fa0ad;
+}
+.vp-steps li span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #eef2f5;
+  color: #64748b;
+  font-size: 8px;
+  font-weight: 800;
+}
+.vp-steps li.active { color: #158fc3; }
+.vp-steps li.active span { background: #158fc3; color: #fff; }
+.vp-steps li.done { color: #15803d; }
+.vp-steps li.done span { background: #e6f6ed; color: #15803d; }
+.vp-hint { font-size: 9px; color: #718697; margin: 6px 0; }
+.vp-doc-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+.vp-doc-row select { flex: 0 0 170px; }
+.vp-doc-row input { flex: 1; }
+
+/* Card tones unique to this module. */
+.vendor-summary-amount.scheduled-amount.is-open { color: #6d28d9; }
+.vendor-summary-amount.hold-amount.is-open { color: #c2570a; }
+
+/* Tax Calculation status badges. The class is chosen from the status the API
+   returned (see taxStatusClass in App.jsx), so a status that changes in the
+   database changes colour with no edit here. An unknown status falls back to
+   .tx-neutral rather than inheriting an unrelated status's colour. */
+.tx-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.tx-pending { background: #fdf3d8; color: #b45309; }
+.tx-calculated { background: #e0f2fe; color: #0369a1; }
+.tx-verified { background: #e6f6ed; color: #15803d; }
+.tx-rejected { background: #fdeaea; color: #b91c1c; }
+.tx-cancelled { background: #e7e5e4; color: #44403c; }
+.tx-neutral { background: transparent; color: #9aa8b2; font-weight: 600; }
+
+/* Tax type badges. Exempt and Zero-Rated are greyed because they legitimately
+   carry no tax, which is not a fault worth colouring as a warning. */
+.tx-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.tx-vat { background: #e4eefb; color: #1d4ed8; }
+.tx-wht { background: #ede9fe; color: #6d28d9; }
+.tx-exempt { background: #eef2f5; color: #64748b; }
+.tx-zero { background: #eef2f5; color: #64748b; }
+
+/* ------------------------------------------------------------------
+   Tax Records
+   Reuses the shared vendor-detail-* and tx-* rules above. Only the pieces
+   unique to this module are declared here: the detail tab strip, the status
+   badge group, the audit timeline, the row overflow menu, and the one extra
+   status colour (Filed) that the tax calculation page did not need.
+   ------------------------------------------------------------------ */
+
+/* "Filed" reuses the verified green — a submitted return is the finished
+   state — so a filed record and a verified one are not visually identical
+   only in wording. */
+.tx-approved { background: #e6f6ed; color: #15803d; }
+
+/* The three status axes read as a group in the detail header. */
+.vendor-detail-header .vendor-detail-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Tab strip. Flat, matching the toolbar rather than a raised panel. */
+.vendor-detail-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 10px 0 12px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+.vendor-detail-tabs button {
+  border: none;
+  background: transparent;
+  padding: 7px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.vendor-detail-tabs button:hover { color: #1e3a5f; }
+.vendor-detail-tabs button.is-active {
+  color: #1e3a5f;
+  border-bottom-color: #1e3a5f;
+}
+
+.vendor-detail-note {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.55;
+  color: #475569;
+}
+
+/* Audit timeline: a left rail with a dot per entry, so the sequence of
+   promotions, filings and remittances is readable at a glance. */
+.vendor-timeline {
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0 4px;
+}
+.vendor-timeline-item {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  padding: 0 0 14px 0;
+}
+/* The rail runs between entries; the last item stops it. */
+.vendor-timeline-item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  bottom: -2px;
+  width: 2px;
+  background: #e2e8f0;
+}
+.vendor-timeline-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: #1e3a5f;
+  flex: 0 0 10px;
+  z-index: 1;
+}
+.vendor-timeline-item > div { display: flex; flex-direction: column; gap: 2px; }
+.vendor-timeline-item strong { font-size: 11px; color: #1e3a5f; }
+.vendor-timeline-meta { font-size: 9px; color: #94a3b8; }
+.vendor-timeline-item p {
+  margin: 3px 0 0;
+  font-size: 10px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* Row overflow menu. Anchored to the actions cell so it opens inward rather
+   than being clipped by the table edge. */
+.vendor-row-actions { position: relative; display: flex; gap: 4px; }
+.vendor-action-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 40;
+  min-width: 190px;
+  background: #fff;
+  border: 1px solid #d8e0e8;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(15, 35, 60, 0.16);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.vendor-action-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  font-size: 10.5px;
+  color: #1e3a5f;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.vendor-action-menu button:hover:not(:disabled) { background: #f1f5f9; }
+/* A disabled action states why in its title, so it is dimmed rather than
+   hidden — the step still visibly exists, it just does not apply here. */
+.vendor-action-menu button:disabled {
+  color: #b6c0cb;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------
+   Tax Filing Preparation
+   Reuses the shared vendor-detail-*, tx-* and modal-overlay rules. Only the
+   pieces unique to this module: the readiness meter, the transaction
+   breakdown tables, the document checklist and the validation list.
+   ------------------------------------------------------------------ */
+
+/* Readiness meter. A percentage alone hides how close it is to being blocked, so
+   the bar carries the fill and the number is always printed beside it. */
+.tf-readiness {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+  background: #fdf3d8;
+  color: #b45309;
+}
+.tf-readiness.is-full { background: #e6f6ed; color: #15803d; }
+
+/* The completed/total breakdown sits inside the readiness pill so the percentage is
+   never a bare number with nothing behind it. */
+.tf-readiness-detail {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  opacity: 0.75;
+  letter-spacing: 0;
+}
+
+/* An em dash where a figure does not apply, so an empty cell reads as "none" rather
+   than as a missing value. */
+.tf-muted { color: #9aa5b1; }
+
+/* The credit waterfall in the detail panel. Intermediate steps are recessive and the
+   two outcomes (payable, credit) are the ones that carry weight. */
+.tf-computation-sub {
+  opacity: 0.85;
+  font-size: 11px;
+}
+.tf-computation-credit {
+  color: #0f766e;
+  font-weight: 600;
+}
+.tf-chain-title {
+  margin-top: 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7a8d;
+}
+.tf-chain-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tf-chain-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: #4a5b6e;
+  padding: 4px 6px;
+  background: #f6f8fa;
+  border-radius: 4px;
+}
+
+/* Row actions carry a text label beside the icon: three bare glyphs left the user
+   guessing what each one did. */
+.vendor-payment-page .vendor-row-actions button span {
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+.tf-readiness-bar {
+  position: relative;
+  height: 20px;
+  border-radius: 10px;
+  background: #eef2f5;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.tf-readiness-fill {
+  height: 100%;
+  background: #15803d;
+  transition: width 0.25s ease;
+}
+.tf-readiness-bar span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: #1e3a5f;
+}
+
+/* A credit is not a payable. The table marks it in words rather than showing a
+   zero, because "output tax exceeded input tax" is a materially different
+   statement from "there was no tax". */
+.tf-credit {
+  font-size: 9px;
+  font-weight: 700;
+  color: #6d28d9;
+  white-space: nowrap;
+}
+/* The deadline cell stacks the date and the overdue chip on separate lines.
+   They used to sit inline, so the chip butted straight against the date
+   ("Sep 20, 2026  7D OVERDUE") and the pair read as one mangled string. Stacking
+   keeps the date on the same line as every other row in the column, and gives the
+   chip its own line so the two are separately legible. */
+.tf-deadline-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.tf-deadline-date {
+  white-space: nowrap;
+}
+
+/* A passed filing deadline.
+   This was #b91c1c at 8px, which rendered as a hard red stamp sitting beside a neutral
+   date and read as a rendering fault rather than a status. The meaning is still "this
+   needs attention", so the colour stays in the warning family, but it is now an amber
+   that sits calmly beside the date instead of shouting over it. The word itself carries
+   the urgency; the colour only has to support it. */
+.tf-overdue-flag {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #92400e;
+  background: #fef3c7;
+  /* The original #fcd34d border sat at 1.29:1 against its own background, which made the
+     chip read as unstyled text. #d97706 gives 2.86:1 -- just under the 3:1 target for a
+     non-text boundary, and deliberately not darker: at #b45309 (4.51:1) the border starts
+     competing with the label, and the label is what actually carries the meaning. The
+     text itself is 6.37:1, comfortably above the 4.5:1 needed to read. */
+  border: 1px solid #d97706;
+  border-radius: 3px;
+  /* Lower case reads as a measurement; upper case shouted at 9px. The chip now has its
+     own line, so it does not need to shout to separate itself from the date. */
+  white-space: nowrap;
+}
+
+.tf-computation-total {
+  border-top: 1px solid #d8e0e8;
+  margin-top: 4px;
+  padding-top: 6px;
+}
+.tf-computation-total span { font-weight: 700; color: #1e3a5f; }
+.tf-computation-total b { font-weight: 800; }
+
+/* Transaction breakdown. A denser table than the main grid — these are the rows
+   behind the totals, so they need reference and source, not a status badge. */
+.tf-tx-tab { display: flex; flex-direction: column; gap: 18px; }
+.tf-tx-group h4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 8px;
+  font-size: 11px;
+  color: #1e3a5f;
+}
+.tf-tx-group h4 span { font-size: 9px; font-weight: 600; color: #64748b; }
+.tf-tx-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.tf-tx-table th {
+  text-align: left;
+  padding: 6px 8px;
+  background: #f4f7fa;
+  border-bottom: 1px solid #dfe6ed;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #64748b;
+  white-space: nowrap;
+}
+.tf-tx-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #eef2f5;
+  color: #334155;
+}
+.tf-tx-table tr:hover td { background: #f8fafc; }
+.tf-doc-reason {
+  display: block;
+  margin-top: 3px;
+  font-size: 8.5px;
+  color: #b45309;
+  max-width: 260px;
+}
+
+/* Document checklist. */
+.tf-doc-list { display: flex; flex-direction: column; gap: 2px; }
+.tf-doc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.tf-doc-head h4 { margin: 0; font-size: 11px; color: #1e3a5f; }
+.tf-doc-head span { font-size: 9px; color: #94a3b8; }
+.tf-doc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border: 1px solid #e6ebf0;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+.tf-doc-row > div:first-child { display: flex; flex-direction: column; gap: 2px; }
+.tf-doc-row strong { font-size: 10.5px; color: #1e3a5f; }
+.tf-doc-meta { font-size: 8.5px; color: #94a3b8; }
+.tf-doc-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+/* Validation checklist. Each row states its own outcome, so a failed gate is
+   readable without opening anything. */
+.tf-validation { display: flex; flex-direction: column; }
+.tf-check-list { list-style: none; margin: 10px 0 0; padding: 0; }
+.tf-check {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eef2f5;
+  align-items: flex-start;
+}
+.tf-check-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  flex: 0 0 16px;
+  margin-top: 1px;
+}
+.tf-check.is-pass .tf-check-icon { background: #e6f6ed; color: #15803d; }
+.tf-check.is-warning .tf-check-icon { background: #fdf3d8; color: #b45309; }
+.tf-check.is-error .tf-check-icon { background: #fdeaea; color: #b91c1c; }
+.tf-check > div { display: flex; flex-direction: column; gap: 2px; }
+.tf-check strong { font-size: 10.5px; color: #1e3a5f; }
+.tf-check span { font-size: 9px; color: #b45309; line-height: 1.45; }
+.tf-check.is-pass span { color: #94a3b8; }
+
+/* The refusal shown inside the status modal when validation is blocking the step. */
+.tf-modal-blocked {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #b91c1c;
+}
+.tf-block-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 9.5px;
+  color: #b91c1c;
+  line-height: 1.6;
+}
+
+/* Card tones unique to this module. */
+.vendor-summary-amount.calculated-amount.is-open { color: #0369a1; }
+.vendor-summary-amount.verified-amount.is-open { color: #15803d; }
+
+.detail-masked-amount {
+  cursor: pointer;
+  user-select: none;
+}
+
+.detail-masked-amount:hover {
+  opacity: 0.7;
 }
 
 /* ---------- Archive pages ---------- */
@@ -3244,4 +4148,2547 @@ tbody tr:hover {
     right:-20px;
     top:-8px;
   }
+}
+
+/* =========================================================
+   CONTRACT VALUE MASKING & TOGGLE
+   ========================================================= */
+
+.th-with-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-visibility-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 3px;
+  border-radius: 4px;
+  color: #758996;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.header-visibility-toggle:hover {
+  color: var(--primary);
+  background: #e3eff6;
+}
+
+.contract-value-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 0;
+  padding: 3px 6px;
+  margin: -3px -6px;
+  border-radius: 5px;
+  font: inherit;
+  font-weight: 750;
+  color: #203b4e;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.contract-value-button:hover {
+  background: #e8f4fb;
+  color: var(--primary);
+}
+
+.contract-value-button.masked {
+  color: #718697;
+  font-size: 11px;
+}
+
+.contract-value-button.masked:hover {
+  color: var(--primary);
+}
+
+.contract-value-icon {
+  display: inline-flex;
+  align-items: center;
+  color: #8b9ca7;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.contract-value-button:hover .contract-value-icon {
+  opacity: 1;
+  color: var(--primary);
+}
+
+/* =========================================================
+   CLIENT CONTRACT MANAGEMENT ENHANCEMENTS
+   ========================================================= */
+
+/* Top 4 Monitoring Cards */
+.contract-expiration-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.contract-exp-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.contract-exp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.contract-exp-card.selected {
+  border-width: 2px;
+  box-shadow: 0 0 0 1px rgba(21, 155, 211, 0.15);
+}
+
+.contract-exp-card.active.selected {
+  border-color: #16a34a;
+  background: #f4fbf6;
+}
+
+.contract-exp-card.expiring.selected {
+  border-color: #f59e0b;
+  background: #fffdf5;
+}
+
+.contract-exp-card.expired.selected {
+  border-color: #dc2626;
+  background: #fff8f8;
+}
+
+.contract-exp-card.archived.selected {
+  border-color: #64748b;
+  background: #f8fafc;
+}
+
+.contract-exp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.contract-exp-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contract-exp-icon.active {
+  background: #e8f8ee;
+  color: #16a34a;
+}
+
+.contract-exp-icon.expiring {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.contract-exp-icon.expired {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.contract-exp-icon.archived {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.contract-exp-badge {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 12px;
+}
+
+.contract-exp-badge.active {
+  color: #16a34a;
+  background: #e8f8ee;
+  border: 1px solid #bbf7d0;
+}
+
+.contract-exp-badge.expiring {
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.contract-exp-badge.expired {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.contract-exp-badge.archived {
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+}
+
+.contract-exp-count {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.1;
+  margin-bottom: 3px;
+}
+
+.contract-exp-title {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.contract-exp-sub {
+  display: block;
+  font-size: 8px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Toolbar & Filter styles */
+.contract-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.contract-toolbar .contract-search {
+  width: min(380px, 45%);
+}
+
+.contract-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.contract-select {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 10px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.contract-select:focus {
+  border-color: var(--primary);
+}
+
+/* Table elements */
+.contract-id-link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: #158fc3;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.contract-id-link:hover {
+  color: var(--primary-dark);
+}
+
+.client-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-company {
+  font-size: 8px;
+  color: #8b9ca7;
+  font-weight: normal;
+  margin-top: 1px;
+}
+
+.end-date-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.days-badge {
+  font-size: 8px;
+  font-weight: 750;
+  padding: 2px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.days-badge.active {
+  background: #e8f8ee;
+  color: #16a34a;
+}
+
+.days-badge.expiring-soon {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.days-badge.expired {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.days-badge.archived {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.billing-cycle-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.billing-cycle-name {
+  font-weight: 700;
+  color: #334155;
+}
+
+.billing-amount-hint {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 2px;
+  font-size: 8px;
+  color: #718697;
+}
+
+/* Click-to-reveal billing amount inside the Billing Cycle column */
+.billing-amount-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: transparent;
+  border: 0;
+  padding: 1px 3px;
+  margin: 0 -3px;
+  border-radius: 4px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.billing-amount-toggle:hover {
+  background: #e8f4fb;
+  color: var(--primary);
+}
+
+.billing-amount-toggle.masked {
+  font-weight: 750;
+}
+
+.billing-amount-toggle.masked:hover {
+  color: var(--primary);
+}
+
+.billing-amount-icon {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.billing-amount-toggle:hover .billing-amount-icon {
+  opacity: 1;
+  color: var(--primary);
+}
+
+.billing-amount-unit {
+  color: #9aabb6;
+}
+
+/* Status Badges with Custom Requested Colors */
+.contract-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.contract-status-badge .status-indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.contract-status-badge.active {
+  color: #16a34a;
+  background: #e8f8ee;
+  border: 1px solid #bbf7d0;
+}
+
+.contract-status-badge.active .status-indicator-dot {
+  background: #16a34a;
+}
+
+.contract-status-badge.expiring-soon {
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.contract-status-badge.expiring-soon .status-indicator-dot {
+  background: #f59e0b;
+}
+
+.contract-status-badge.expired {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.contract-status-badge.expired .status-indicator-dot {
+  background: #dc2626;
+}
+
+.contract-status-badge.archived {
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+}
+
+.contract-status-badge.archived .status-indicator-dot {
+  background: #64748b;
+}
+
+/* Status text color utilities */
+.status-color-active {
+  color: #16a34a !important;
+}
+
+.status-color-expiring-soon {
+  color: #d97706 !important;
+}
+
+.status-color-expired {
+  color: #dc2626 !important;
+}
+
+.status-color-archived {
+  color: #64748b !important;
+}
+
+/* Contract Detail & Renewal Modal */
+.contract-detail-modal {
+  max-width: 780px !important;
+  width: 95% !important;
+  max-height: 90vh !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.contract-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: #f8fafc;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.contract-tab-btn {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.contract-tab-btn:hover {
+  color: var(--primary-dark);
+}
+
+.contract-tab-btn.active {
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary);
+  background: #ffffff;
+}
+
+.contract-modal-body {
+  padding: 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.contract-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.contract-section-card {
+  background: #f8fbfe;
+  border: 1px solid var(--border-light);
+  border-radius: 7px;
+  padding: 12px 14px;
+}
+
+.contract-section-card.full {
+  grid-column: span 2;
+}
+
+.contract-section-card h4 {
+  font-size: 11px;
+  color: #1e3a5f;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e2edf3;
+  padding-bottom: 5px;
+}
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.detail-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.detail-list span {
+  color: #64748b;
+}
+
+.detail-list b {
+  color: #1e293b;
+  text-align: right;
+}
+
+.detail-list b.highlight-amount {
+  color: #0284c7;
+  font-size: 12px;
+}
+
+.expiration-tracking-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+.exp-metric {
+  text-align: center;
+}
+
+.exp-metric span {
+  display: block;
+  font-size: 8px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.exp-metric strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.exp-arrow {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.modal-doc-actions {
+  margin-bottom: 8px;
+}
+
+.modal-doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-doc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.no-docs-text {
+  font-size: 9px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Connected Client Billing Pipeline */
+.flow-explanation-card {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.flow-explanation-card h4 {
+  color: #0369a1;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.flow-explanation-card p {
+  font-size: 9px;
+  color: #0c4a6e;
+  line-height: 1.4;
+}
+
+.billing-pipeline-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 12px 4px 16px;
+}
+
+.pipeline-step {
+  flex: 1;
+  min-width: 100px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 10px 8px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.pipeline-step.current {
+  border-color: #0284c7;
+  background: #f0f9ff;
+}
+
+.pipeline-step .step-num {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: #0284c7;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pipeline-step strong {
+  display: block;
+  font-size: 9px;
+  color: #1e293b;
+  margin-top: 4px;
+}
+
+.pipeline-step p {
+  font-size: 8px;
+  color: #0369a1;
+  font-weight: 700;
+  margin: 3px 0 2px;
+}
+
+.pipeline-step small {
+  font-size: 7px;
+  color: #64748b;
+  display: block;
+}
+
+.pipeline-arrow {
+  color: #94a3b8;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.pipeline-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* Renewal Form & History */
+.renewal-form-box {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.renewal-form-box h4 {
+  font-size: 11px;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.form-subtext {
+  font-size: 9px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.renewal-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.renewal-inputs-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.renewal-inputs-grid input {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #ffffff;
+  font-size: 10px;
+  outline: none;
+}
+
+.renewal-inputs-grid input:focus {
+  border-color: var(--primary);
+}
+
+.renewal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.renewal-history-section h4 {
+  font-size: 11px;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.modal-table-card {
+  box-shadow: none !important;
+  border: 1px solid var(--border) !important;
+}
+
+@media (max-width: 900px) {
+  .contract-expiration-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contract-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contract-toolbar .contract-search {
+    width: 100%;
+  }
+
+  .contract-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contract-section-card.full {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .contract-expiration-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .renewal-inputs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .renewal-inputs-grid .full {
+    grid-column: span 1;
+  }
+}
+
+/* =========================================================
+   BILLING GENERATION PAGE
+   ========================================================= */
+
+.billing-generation-page .vendor-summary-grid {
+  margin-top: 0;
+}
+
+.billing-generation-page .flow-explanation-card {
+  margin-top: 12px;
+}
+
+.billing-generation-page .settings-saved.error {
+  color: #d85252;
+  background: #fff0f0;
+  border-color: #f5c6c6;
+}
+
+.billing-generation-page .settings-saved small {
+  color: #718697;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* Inline masked amounts inside billing detail panel and flow card */
+.vendor-detail-list .contract-value-button {
+  font-size: inherit;
+  padding: 1px 4px;
+  margin: -1px -4px;
+}
+
+.flow-explanation-card .contract-value-button {
+  display: inline-flex;
+  vertical-align: baseline;
+  font-size: 9px;
+  font-weight: 800;
+  color: #0c4a6e;
+  padding: 0 2px;
+  margin: 0;
+}
+
+.flow-explanation-card .contract-value-button.masked {
+  font-size: 10px;
+  color: #64748b;
+}
+
+.flow-explanation-card .contract-value-button:hover {
+  background: #dbeafe;
+  color: #0369a1;
+}
+
+.flow-explanation-card .contract-value-icon {
+  margin-left: 1px;
+}
+
+/* Recent Financial Activity — click-to-reveal amounts */
+.money-cell.masked-amount {
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.money-cell.masked-amount:hover {
+  opacity: 0.7;
+}
+
+/* Aging of Receivables — every amount starts as "*" and only the clicked
+   cell reveals its own value (cards, summary table, rows, detail dialog). */
+span.masked-amount {
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+span.masked-amount:hover {
+  opacity: 0.7;
+}
+
+
+
+/* =========================================================
+   SERVICE INVOICE MANAGEMENT
+   ========================================================= */
+
+.service-invoice-page {
+  gap: 16px;
+}
+
+.invoice-summary-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #718697;
+}
+
+/* Badge + dot colors come from the shared status palettes (inline styles) */
+.invoice-status-badge,
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.invoice-status-dot,
+.status-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.invoice-status-legend,
+.status-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0 2px;
+}
+
+.invoice-status-chip,
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.invoice-status-chip:hover,
+.status-chip:hover {
+  box-shadow: 0 2px 6px rgba(21, 155, 211, 0.18);
+}
+
+.invoice-status-chip.selected,
+.status-chip.selected {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px currentColor;
+}
+
+.invoice-status-chip b,
+.status-chip b {
+  font-size: 10px;
+}
+
+.invoice-status-clear,
+.status-clear {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: #ffffff;
+  color: #607887;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.invoice-status-clear:hover,
+.status-clear:hover {
+  background: #f4f8fa;
+  color: var(--primary);
+}
+
+.invoice-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .invoice-status-legend,
+  .status-legend {
+    gap: 6px;
+  }
+}
+
+/* =========================================================
+   OUTSTANDING BALANCE TRACKING — STATUS BADGES (text labels)
+   Classes are derived from the backend status:
+   Paid | Current | Partially Paid | Due Soon | Overdue | Escalated
+   ========================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status-badge b {
+  font-size: 10px;
+}
+
+.status-badge.paid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.current {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-badge.partially-paid {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.due-soon {
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+.status-badge.overdue {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-badge.escalated {
+  background: #991b1b;
+  color: #ffffff;
+}
+
+/* Fallback keeps unknown statuses readable instead of unstyled. */
+.status-badge.unknown {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Payment statuses (Client Payment History + Payment Recording). */
+.status-badge.verified {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.pending-verification {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.recorded {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-badge.cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Client Payment History — payment date range row + full-width table. */
+.payment-history-page {
+  gap: 16px;
+}
+
+.payment-history-date-bar {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: -8px;
+}
+
+.payment-history-date-bar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #587186;
+  text-transform: uppercase;
+}
+
+.payment-history-date-bar input[type="date"] {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.payment-history-date-bar .light-button {
+  margin-left: auto;
+}
+
+.payment-history-page .table-card table {
+  min-width: 1180px;
+}
+
+/* =========================================================
+   BILLING SCHEDULE MONITORING
+   ========================================================= */
+
+.schedule-monitoring-page {
+  gap: 16px;
+}
+
+.schedule-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 10px 0 16px;
+}
+
+.schedule-monitoring-page .settings-saved small {
+  display: block;
+  margin-top: 4px;
+  color: #718697;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.schedule-invoice-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.schedule-invoice-no {
+  font-weight: 700;
+  color: #334155;
+}
+
+.schedule-invoice-none {
+  color: #9aa8b1;
+  font-style: italic;
+}
+
+.schedule-invoice-cell small {
+  font-size: 8px;
+  color: #718697;
+}
+
+.schedule-detail-modal {
+  max-width: 880px !important;
+  width: 95% !important;
+}
+
+.schedule-detail-body {
+  padding: 16px;
+}
+
+.schedule-detail-body .vendor-detail-grid {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .schedule-summary-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.row-action-btn {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #cbdde8;
+  border-radius: 4px;
+  color: #5d7d91;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.row-action-btn:hover {
+  background: #f2f8fc;
+  border-color: #159bd3;
+  color: #159bd3;
+}
+
+.row-action-btn:active {
+  transform: scale(0.96);
+}
+
+.row-action-btn:disabled {
+  color: #aebfca;
+  background: #f7fafc;
+  border-color: #dce8ef;
+  cursor: not-allowed;
+}
+
+.row-action-btn:disabled:hover {
+  color: #aebfca;
+  background: #f7fafc;
+  border-color: #dce8ef;
+}
+
+/* =========================================================
+   AGING OF RECEIVABLES
+   Categories (Current, 1-30, 31-60, 61-90, 90+ Days) and status
+   text labels come from the backend — colors are decorative only.
+   ========================================================= */
+
+.aging-receivables-page .aging-summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+}
+
+.aging-card-count {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #718697;
+}
+
+.aging-amount-current {
+  color: #2563eb;
+}
+
+.aging-amount-1-30 {
+  color: #d97706;
+}
+
+.aging-amount-31-60 {
+  color: #ea580c;
+}
+
+.aging-amount-61-90 {
+  color: #dc2626;
+}
+
+.aging-amount-90-plus {
+  color: #991b1b;
+}
+
+/* Aging category badges — text labels with decorative color */
+.status-badge.aging-current {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-badge.aging-1-30 {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.aging-31-60 {
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+.status-badge.aging-61-90 {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-badge.aging-90-plus {
+  background: #991b1b;
+  color: #ffffff;
+}
+
+/* Aging Summary table (category / count / outstanding / total) */
+.aging-summary-panel {
+  margin-bottom: 16px;
+}
+
+.aging-summary-table tfoot td {
+  font-weight: 800;
+  background: #f7fafc;
+  border-top: 2px solid var(--border);
+}
+
+/* Row actions — ⋯ dropdown with all six receivable actions */
+.aging-row-actions {
+  position: relative;
+  justify-content: flex-end;
+}
+
+.aging-menu-toggle {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #cbdde8;
+  border-radius: 4px;
+  color: #5d7d91;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aging-menu-toggle:hover {
+  background: #f2f8fc;
+  border-color: #159bd3;
+  color: #159bd3;
+}
+
+.aging-action-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  min-width: 195px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.14);
+}
+
+.aging-action-menu button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #314a5b;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.aging-action-menu button:hover {
+  background: #edf7fb;
+  color: var(--primary);
+}
+
+/* Receivable detail dialog (GET /api/receivables/{id}) */
+.aging-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+.aging-detail-section h4 {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #587186;
+}
+
+.aging-detail-section.focused h4 {
+  color: var(--primary);
+}
+
+.aging-detail-grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 16px;
+}
+
+.aging-detail-grid dt {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #718697;
+}
+
+.aging-detail-grid dd {
+  margin: 2px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #314a5b;
+}
+
+.aging-detail-loading,
+.aging-detail-empty {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #718697;
+}
+
+@media (max-width: 900px) {
+  .aging-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   COLLECTION SCHEDULING
+   Page-specific layout and status decorations. Financial values remain
+   server-derived; these classes only describe the API response labels.
+   ========================================================= */
+
+.collection-scheduling-page {
+  gap: 16px;
+}
+
+.collection-summary-grid {
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+}
+
+.collection-date-bar {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: -8px;
+}
+
+.collection-date-bar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #587186;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.collection-date-bar input[type="date"] {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #ffffff;
+  color: var(--foreground);
+  font-size: 11px;
+}
+
+.collection-date-bar .light-button {
+  margin-left: auto;
+}
+
+.collection-scheduling-page .vendor-toolbar {
+  flex-wrap: wrap;
+}
+
+.collection-scheduling-page .vendor-toolbar-controls {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.collection-scheduling-page .table-card table {
+  min-width: 1480px;
+}
+
+.collection-dialog {
+  width: min(760px, 100%);
+}
+
+.collection-form-body {
+  max-height: 64vh;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+.collection-form-error {
+  display: block;
+  margin-top: 4px;
+  color: var(--red);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.collection-form-help {
+  display: block;
+  margin-top: 4px;
+  color: #718697;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.collection-notes {
+  width: 100%;
+  min-height: 72px;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #fbfdfe;
+  color: #354d5d;
+  outline: none;
+  resize: vertical;
+  font: inherit;
+  font-size: 10px;
+}
+
+.collection-notes:focus {
+  border-color: #72bddb;
+  box-shadow: 0 0 0 2px rgba(21, 155, 211, 0.08);
+}
+
+.collection-dialog > .modal-footer {
+  margin: 0;
+  padding: 14px 18px;
+  background: #ffffff;
+}
+
+.collection-dialog .modal-footer .primary-button,
+.collection-dialog .modal-footer .light-button {
+  min-width: 92px;
+}
+
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 12px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.priority-badge.high {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.priority-badge.medium {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.priority-badge.low {
+  background: #e8f8f0;
+  color: #15803d;
+}
+
+.status-badge.scheduled {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-badge.in-progress {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.status-badge.due-today {
+  background: #fff3cd;
+  color: #a16207;
+}
+
+.status-badge.rescheduled {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-badge.collected {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-badge.cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+@media (max-width: 1100px) {
+  .collection-summary-grid {
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .collection-summary-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+
+  .collection-date-bar .light-button {
+    margin-left: 0;
+  }
+
+  .collection-scheduling-page .vendor-toolbar-controls {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .collection-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-form-body {
+    padding: 14px;
+  }
+
+  .collection-dialog > .modal-footer {
+    padding: 12px 14px;
+  }
+}
+
+/* ============================================================
+   OFFICIAL RECEIPT GENERATION
+   ============================================================ */
+.official-receipt-page { gap: 16px; }
+.official-receipt-page .or-notice.error { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+.official-receipt-page .or-notice.success { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
+.official-receipt-page .or-summary-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px;
+}
+.or-summary-card {
+  display: grid; grid-template-rows: auto auto auto; align-content: start;
+  gap: 6px; min-height: 104px; padding: 16px;
+  background: #fff; border: 1px solid var(--border); border-radius: 8px;
+  border-top: 3px solid #64748b; box-shadow: var(--shadow);
+}
+.or-summary-card > * { display: block; width: 100%; margin: 0; }
+.or-summary-label {
+  color: #475569; font-size: 10px; font-weight: 800;
+  line-height: 1.35; text-transform: uppercase; letter-spacing: .04em;
+}
+.or-summary-value { color: #475569; font-size: 20px; font-weight: 850; line-height: 1.2; }
+.or-issued-amount-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #16a34a;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+.or-issued-amount-toggle.is-hidden { min-width: 18px; font-size: 28px; }
+.or-issued-amount-toggle:hover { color: #15803d; text-decoration: underline; text-underline-offset: 3px; }
+.or-issued-amount-toggle:focus-visible { outline: 2px solid #86efac; outline-offset: 3px; }
+.or-summary-note { color: #64748b; font-size: 10px; font-weight: 600; line-height: 1.35; }
+.or-summary-card.total { border-top-color: #64748b; }
+.or-summary-card.issued,
+.or-summary-card.issued-amount { border-top-color: #16a34a; }
+.or-summary-card.verified { border-top-color: #2563eb; }
+.official-receipt-page .or-summary-card.issued .or-summary-label,
+.official-receipt-page .or-summary-card.issued .or-summary-value,
+.official-receipt-page .or-summary-card.issued-amount .or-summary-label,
+.official-receipt-page .or-summary-card.issued-amount .or-summary-value { color: #16a34a; }
+.official-receipt-page .or-summary-card.verified .or-summary-label,
+.official-receipt-page .or-summary-card.verified .or-summary-value { color: #2563eb; }
+.official-receipt-page .or-summary-card.total .or-summary-label,
+.official-receipt-page .or-summary-card.total .or-summary-value { color: #475569; }
+.or-status-legend {
+  padding: 14px 16px; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow);
+}
+.or-status-legend h3 { margin: 0 0 9px; color: #314a5b; font-size: 12px; }
+.or-status-legend ol { display: grid; grid-template-columns: repeat(2, minmax(300px, 1fr)); gap: 7px 24px; margin: 0; padding-left: 20px; }
+.or-status-legend li { display: flex; align-items: center; gap: 7px; padding-left: 2px; color: #475569; font-size: 10px; line-height: 1.5; }
+.or-status-legend li::marker { color: #64748b; font-weight: 700; }
+.or-status-legend-item .or-status { flex: 0 0 auto; }
+.or-status-description { color: #526776; }
+.or-available-panel, .or-record-panel { margin-top: 0; }
+.or-section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.or-section-heading h3 { margin: 0; color: #314a5b; font-size: 13px; }
+.or-section-heading p { margin: 3px 0 0; color: #84949f; font-size: 9px; }
+.or-table-card table { min-width: 1080px; }
+.or-table-card td small { display: block; margin-top: 3px; color: #8b9aa4; font-size: 8px; }
+.or-received-amount-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 18px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #2563eb;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+.or-received-amount-toggle.is-hidden { min-width: 14px; font-size: 26px; }
+.or-received-amount-toggle:hover { color: #1d4ed8; text-decoration: underline; text-underline-offset: 3px; }
+.or-received-amount-toggle:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+/* Official Receipt Status Text */
+.or-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.or-status.issued { color: #15803d; background: #dcfce7; }
+.or-status.verified { color: #1d4ed8; background: #dbeafe; }
+.or-status.pending { color: #a16207; background: #fef9c3; }
+.or-status.reissued { color: #c2410c; background: #ffedd5; }
+.or-status.cancelled { color: #b91c1c; background: #fee2e2; }
+.or-status.voided { color: #7e22ce; background: #f3e8ff; }
+.or-toolbar { display: flex; justify-content: flex-end; align-items: flex-end; gap: 10px; margin-bottom: 10px; }
+.or-toolbar > label { display: flex; flex-direction: column; gap: 4px; color: #687d8b; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.or-toolbar select, .or-search { height: 34px; border: 1px solid var(--border); border-radius: 5px; background: #fff; color: #354d5d; font-size: 10px; }
+.or-toolbar select { padding: 0 10px; }
+.or-search { display: flex; align-items: center; gap: 7px; width: min(390px, 45vw); padding: 0 10px; }
+.or-search input { width: 100%; border: 0; outline: 0; background: transparent; color: #354d5d; font-size: 11px; }
+.or-row-actions { display: flex; justify-content: flex-end; gap: 5px; }
+.or-row-actions button, .or-generate-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  height: 28px; border: 1px solid #cbdde8; border-radius: 5px; background: #fff; color: #5d7d91; cursor: pointer;
+}
+.or-row-actions button { width: 28px; padding: 0; }
+.or-row-actions button:hover:not(:disabled), .or-generate-button:hover { color: #159bd3; border-color: #159bd3; background: #f2f8fc; }
+.or-row-actions button.danger { color: #c53030; }
+.or-row-actions button:disabled { opacity: .4; cursor: not-allowed; }
+.or-generate-button { padding: 0 9px; color: #166534; border-color: #86efac; background: #f0fdf4; font-size: 9px; font-weight: 800; }
+.official-receipt-modal { width: min(720px, 100%); }
+.official-receipt-detail { width: min(850px, 100%); }
+.official-receipt-modal-body { display: flex; flex-direction: column; gap: 15px; padding: 18px; max-height: 64vh; overflow-y: auto; }
+.official-receipt-modal-body .aging-detail-grid .full { grid-column: 1 / -1; }
+.or-payment-preview { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid #b8dfef; border-radius: 7px; background: #f0f9fc; }
+.or-payment-preview > div { display: flex; flex: 1; flex-direction: column; gap: 3px; }
+.or-payment-preview strong { color: #294354; font-size: 12px; }
+.or-payment-preview span { color: #708593; font-size: 9px; }
+.or-payment-preview > b { color: #16704a; font-size: 16px; }
+.or-detail-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.or-detail-hero > div { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 7px; background: #f7fafc; }
+.or-detail-hero span { color: #748794; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.or-detail-hero strong { color: #294354; font-size: 15px; }
+.or-detail-hero small { color: #82939e; font-size: 9px; }
+.or-void-field { display: flex; flex-direction: column; gap: 6px; color: #526b7b; font-size: 10px; font-weight: 800; }
+.or-void-field textarea { width: 100%; padding: 10px; resize: vertical; border: 1px solid var(--border); border-radius: 6px; color: #354d5d; font: inherit; font-size: 11px; }
+.danger-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; padding: 0 11px; border: 1px solid #fca5a5; border-radius: 5px; background: #fff1f2; color: #b91c1c; font-size: 10px; font-weight: 800; cursor: pointer; }
+.danger-button:hover { background: #fee2e2; }
+
+@media (max-width: 900px) {
+  .official-receipt-page .or-summary-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+  .or-toolbar { justify-content: flex-start; flex-wrap: wrap; }
+  .or-search { width: 100%; }
+  .or-status-legend ol { grid-template-columns: 1fr; }
+  .or-detail-hero { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .official-receipt-page .or-summary-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   COLLECTION MONITORING
+   ============================================================ */
+.collection-monitoring-page { gap: 16px; }
+.collection-monitoring-page .cm-error { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+.cm-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 12px;
+}
+.cm-summary-card {
+  display: flex;
+  min-height: 108px;
+  padding: 15px;
+  flex-direction: column;
+  gap: 7px;
+  border: 1px solid var(--border);
+  border-top: 3px solid #64748b;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+.cm-summary-card > span {
+  color: #526b7b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.cm-summary-card > strong,
+.cm-summary-value { color: #334155; font-size: 19px; line-height: 1.2; }
+.cm-amount-reveal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+.cm-amount-reveal.is-hidden { min-width: 16px; font-size: 30px; }
+.cm-amount-reveal.is-revealed:hover,
+.cm-amount-reveal.is-hidden:hover { text-decoration: underline; text-underline-offset: 3px; }
+.cm-amount-reveal:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.cm-summary-card > small { color: #718697; font-size: 9px; line-height: 1.35; }
+.cm-summary-card.collected { border-top-color: #16a34a; }
+.cm-summary-card.collected > span,
+.cm-summary-card.collected > strong,
+.cm-summary-card.collected > .cm-amount-reveal { color: #15803d; }
+.cm-summary-card.pending { border-top-color: #ca8a04; }
+.cm-summary-card.pending > span,
+.cm-summary-card.pending > strong,
+.cm-summary-card.pending > .cm-amount-reveal { color: #a16207; }
+.cm-summary-card.overdue { border-top-color: #ea580c; }
+.cm-summary-card.overdue > span,
+.cm-summary-card.overdue > strong,
+.cm-summary-card.overdue > .cm-amount-reveal { color: #c2410c; }
+.cm-summary-card.rate { border-top-color: #2563eb; }
+.cm-summary-card.rate > span,
+.cm-summary-card.rate > strong { color: #1d4ed8; }
+.cm-overview {
+  padding: 15px 17px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+.cm-overview-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.cm-overview-heading h3 { margin: 0; color: #314a5b; font-size: 13px; }
+.cm-overview-heading p { margin: 3px 0 0; color: #84949f; font-size: 9px; }
+.cm-overview-heading > strong { color: #15803d; font-size: 22px; }
+.cm-progress { display: flex; align-items: center; gap: 10px; }
+.cm-progress-track {
+  flex: 1;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8f1f6;
+}
+.cm-progress-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #16a34a, #34d399);
+  transition: width .25s ease;
+}
+.cm-progress > b { min-width: 48px; color: #526b7b; font-size: 10px; text-align: right; }
+.cm-progress.compact { min-width: 118px; margin-top: 5px; }
+.cm-progress.compact .cm-progress-track { height: 5px; }
+.cm-progress.compact > b { min-width: 40px; font-size: 8px; }
+.cm-status-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+.cm-status-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 5px 9px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.cm-status-filter b {
+  min-width: 19px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .72);
+  font-size: 9px;
+  text-align: center;
+}
+.cm-status-filter.collected { color: #15803d; background: #dcfce7; }
+.cm-status-filter.partially-collected { color: #1d4ed8; background: #dbeafe; }
+.cm-status-filter.pending { color: #a16207; background: #fef9c3; }
+.cm-status-filter.overdue { color: #c2410c; background: #ffedd5; }
+.cm-status-filter.cancelled { color: #b91c1c; background: #fee2e2; }
+.cm-status-filter.selected { border-color: currentColor; box-shadow: 0 0 0 1px currentColor inset; }
+.cm-clear-filter {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: #64748b;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.cm-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cm-search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: min(430px, 52vw);
+  height: 35px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #ffffff;
+  color: #708593;
+}
+.cm-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #354d5d;
+  font: inherit;
+  font-size: 11px;
+}
+.cm-toolbar > label:not(.cm-search) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #687d8b;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.cm-toolbar select {
+  height: 35px;
+  min-width: 170px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #ffffff;
+  color: #354d5d;
+  font-size: 10px;
+}
+.cm-record-panel { margin-top: 0; }
+.cm-section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cm-section-heading h3 { margin: 0; color: #314a5b; font-size: 13px; }
+.cm-section-heading p { margin: 3px 0 0; color: #84949f; font-size: 9px; }
+.cm-table-card table { min-width: 1510px; }
+.cm-table-card td { font-size: 9px; vertical-align: middle; }
+.cm-table-card td small { display: block; margin-top: 3px; color: #8b9aa4; font-size: 8px; line-height: 1.35; }
+.cm-table-amount {
+  display: inline-flex;
+  align-items: center;
+  min-width: 18px;
+  min-height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+.cm-table-amount:hover { text-decoration: underline; text-underline-offset: 3px; }
+.cm-table-amount:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.cm-table-amount.cm-amount-due { color: #2563eb; }
+.cm-table-amount.cm-amount-collected { color: #15803d; }
+.cm-table-amount.cm-remaining { color: #b45309; }
+.cm-amount-collected { color: #15803d; font-size: 10px; }
+.cm-remaining { color: #b45309; font-weight: 750; }
+.cm-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.cm-status.collected { color: #15803d; background: #dcfce7; }
+.cm-status.partially-collected { color: #1d4ed8; background: #dbeafe; }
+.cm-status.pending { color: #a16207; background: #fef9c3; }
+.cm-status.overdue { color: #c2410c; background: #ffedd5; }
+.cm-status.cancelled { color: #b91c1c; background: #fee2e2; }
+.cm-view-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid #b8dce9;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #167aa5;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.cm-view-button:hover:not(:disabled) { border-color: #159bd3; background: #f0f9fc; }
+.cm-view-button:disabled { opacity: .45; cursor: wait; }
+.cm-detail-modal { width: min(960px, 96vw); }
+.cm-detail-body {
+  display: flex;
+  max-height: 68vh;
+  padding: 17px;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+}
+.cm-detail-hero {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.cm-detail-hero > div {
+  display: flex;
+  min-width: 0;
+  padding: 13px;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid #dceaf2;
+  border-radius: 7px;
+  background: #f8fbfd;
+}
+.cm-detail-hero > div > span:first-child { color: #718697; font-size: 8px; font-weight: 800; text-transform: uppercase; }
+.cm-detail-hero strong { color: #294354; font-size: 14px; }
+.cm-detail-hero small { color: #82939e; font-size: 8px; line-height: 1.4; }
+.cm-detail-hero.collected { border-color: #86efac; background: #f0fdf4; }
+.cm-detail-hero.partially-collected { border-color: #93c5fd; background: #eff6ff; }
+.cm-detail-hero.pending { border-color: #fde047; background: #fefce8; }
+.cm-detail-hero.overdue { border-color: #fdba74; background: #fff7ed; }
+.cm-detail-hero.cancelled { border-color: #fca5a5; background: #fef2f2; }
+.cm-detail-section {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #ffffff;
+}
+.cm-detail-section h3 { margin: 0 0 10px; color: #314a5b; font-size: 12px; }
+.cm-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 16px;
+  margin: 0;
+}
+.cm-detail-grid > div { min-width: 0; }
+.cm-detail-grid .full { grid-column: 1 / -1; }
+.cm-detail-grid dt { color: #7b8f9c; font-size: 8px; font-weight: 800; text-transform: uppercase; }
+.cm-detail-grid dd { margin: 3px 0 0; color: #354d5d; font-size: 10px; font-weight: 650; overflow-wrap: anywhere; }
+.cm-payment-table table { min-width: 700px; }
+.cm-payment-table td { font-size: 9px; }
+.cm-empty-note { margin: 0; padding: 14px; border-radius: 6px; background: #f7fafc; color: #718697; font-size: 10px; }
+
+@media (max-width: 1100px) {
+  .cm-summary-grid { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
+}
+@media (max-width: 760px) {
+  .cm-summary-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+  .cm-toolbar { align-items: stretch; }
+  .cm-search { width: 100%; }
+  .cm-toolbar > label:not(.cm-search),
+  .cm-toolbar select { width: 100%; }
+  .cm-detail-hero,
+  .cm-detail-grid { grid-template-columns: 1fr; }
+  .cm-clear-filter { margin-left: 0; }
+}
+@media (max-width: 520px) {
+  .cm-summary-grid { grid-template-columns: 1fr; }
+}
+/* ============================================================
+   COLLECTION FOLLOW-UPS
+   ============================================================ */
+.collection-follow-ups-page { gap: 16px; }
+.cfu-error { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+.cfu-notice { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
+.cfu-notice > button { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin-left: auto; padding: 0; border: 0; border-radius: 4px; background: transparent; color: inherit; cursor: pointer; }
+.cfu-summary-grid { display: grid; grid-template-columns: repeat(5, minmax(140px, 1fr)); gap: 12px; }
+.cfu-summary-card { display: flex; min-height: 108px; padding: 15px; flex-direction: column; gap: 7px; border: 1px solid var(--border); border-top: 3px solid #64748b; border-radius: 8px; background: #fff; box-shadow: var(--shadow); color: inherit; text-align: left; }
+.cfu-summary-card:hover { border-color: #8ac9e5; box-shadow: var(--shadow-hover); }
+.cfu-summary-card > span { color: #526b7b; font-size: 10px; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
+.cfu-summary-card > strong { color: #334155; font-size: 21px; line-height: 1.2; }
+.cfu-summary-card > small { color: #718697; font-size: 9px; }
+.cfu-summary-card.pending { border-top-color: #ca8a04; }
+.cfu-summary-card.pending > span, .cfu-summary-card.pending > strong { color: #a16207; }
+.cfu-summary-card.contacted { border-top-color: #16a34a; }
+.cfu-summary-card.contacted > span, .cfu-summary-card.contacted > strong { color: #15803d; }
+.cfu-summary-card.promise { border-top-color: #2563eb; }
+.cfu-summary-card.promise > span, .cfu-summary-card.promise > strong { color: #1d4ed8; }
+.cfu-summary-card.overdue { border-top-color: #ea580c; }
+.cfu-summary-card.overdue > span, .cfu-summary-card.overdue > strong { color: #c2410c; }
+.cfu-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; background: #eef9fd; }
+.cfu-search { display: flex; align-items: center; gap: 7px; flex: 1 1 260px; min-width: 220px; height: 35px; padding: 0 10px; border: 1px solid var(--border); border-radius: 5px; background: #fff; color: #708593; }
+.cfu-search input { width: 100%; border: 0; outline: 0; background: transparent; color: #354d5d; font: inherit; font-size: 10px; }
+.cfu-toolbar > select { min-width: 145px; height: 35px; padding: 0 9px; border: 1px solid var(--border); border-radius: 5px; background: #fff; color: #354d5d; font-size: 10px; }
+.cfu-toolbar > label { display: flex; align-items: center; gap: 5px; color: #587186; font-size: 9px; font-weight: 800; }
+.cfu-toolbar > label input { height: 35px; padding: 0 8px; border: 1px solid var(--border); border-radius: 5px; background: #fff; color: #354d5d; font-size: 10px; }
+.cfu-record-panel { padding: 13px; border: 1px solid var(--border); border-radius: 8px; background: #fff; box-shadow: var(--shadow); }
+.cfu-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.cfu-section-heading h3 { margin: 0; color: #314a5b; font-size: 14px; }
+.cfu-section-heading p { margin: 3px 0 0; color: #84949f; font-size: 9px; }
+.cfu-section-heading > span { display: inline-flex; align-items: center; gap: 5px; color: #1689b5; font-size: 9px; }
+.cfu-table-card { overflow-x: auto; }
+.cfu-table-card table { min-width: 1240px; }
+.cfu-table-card th, .cfu-table-card td { white-space: nowrap; }
+.cfu-table-card tbody tr { cursor: pointer; }
+.cfu-table-card tbody tr:hover { background: #f1f9fc; }
+.cfu-amount { min-width: 24px; padding: 3px 5px; border: 0; border-radius: 4px; background: transparent; color: #0b6f99; font: inherit; font-size: 10px; font-weight: 800; cursor: pointer; }
+.cfu-amount:hover { text-decoration: underline; text-underline-offset: 3px; }
+.cfu-amount.is-hidden { font-size: 20px; line-height: 14px; }
+.cfu-overdue-date { color: #c2410c; font-weight: 800; }
+
+.cfu-badge { display: inline-flex; align-items: center; padding: 4px 9px; border-radius: 999px; font-size: 9px; font-weight: 800; white-space: nowrap; }
+.cfu-badge.result.contacted { color: #15803d; background: #dcfce7; }
+.cfu-badge.result.promise-to-pay { color: #1d4ed8; background: #dbeafe; }
+.cfu-badge.result.pending-response { color: #a16207; background: #fef9c3; }
+.cfu-badge.result.no-response { color: #b91c1c; background: #fee2e2; }
+.cfu-badge.result.rescheduled { color: #c2410c; background: #ffedd5; }
+.cfu-badge.status.pending { color: #a16207; background: #fef9c3; }
+.cfu-badge.status.contacted, .cfu-badge.status.completed { color: #15803d; background: #dcfce7; }
+.cfu-badge.status.promise-to-pay { color: #1d4ed8; background: #dbeafe; }
+.cfu-badge.status.rescheduled { color: #c2410c; background: #ffedd5; }
+.cfu-badge.status.overdue { color: #b91c1c; background: #fee2e2; }
+.cfu-row-actions { display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
+.cfu-row-actions button { display: inline-flex; align-items: center; justify-content: center; width: 27px; height: 27px; padding: 0; border: 1px solid #cbdde8; border-radius: 5px; background: #fff; color: #5d7d91; cursor: pointer; }
+.cfu-row-actions button:hover:not(:disabled) { border-color: #159bd3; background: #f0f9fc; color: #159bd3; }
+.cfu-row-actions button:disabled { opacity: .45; cursor: wait; }
+.cfu-empty { height: 100px; color: #718697 !important; text-align: center; }
+.cfu-empty svg { margin: 0 5px -3px 0; vertical-align: middle; }
+.cfu-dialog { width: min(760px, 100%); }
+.cfu-form-body { padding: 17px 18px 0; }
+.cfu-selected-invoice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 11px; border: 1px solid #b8dfef; border-radius: 7px; background: #f0f9fc; }
+.cfu-selected-invoice > div { display: flex; flex-direction: column; gap: 3px; }
+.cfu-selected-invoice span { color: #708593; font-size: 8px; font-weight: 800; text-transform: uppercase; }
+.cfu-selected-invoice strong { color: #294354; font-size: 10px; }
+.cfu-detail-modal { width: min(760px, 100%); }
+.cfu-detail-body { max-height: 64vh; padding: 17px 18px; overflow-y: auto; }
+.cfu-detail-hero { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.cfu-detail-hero > div { display: flex; min-width: 0; flex-direction: column; gap: 4px; padding: 13px; border: 1px solid #dceaf2; border-radius: 7px; background: #f8fbfd; }
+.cfu-detail-hero > div > span:first-child { color: #718697; font-size: 8px; font-weight: 800; text-transform: uppercase; }
+.cfu-detail-hero strong { color: #294354; font-size: 14px; }
+.cfu-detail-hero small { color: #82939e; font-size: 8px; }
+.cfu-detail-actions { margin: 0; padding: 13px 18px; }
+.cfu-detail-actions .danger { margin-right: auto; color: #b91c1c; }
+@media (max-width: 1100px) { .cfu-summary-grid { grid-template-columns: repeat(3, minmax(140px, 1fr)); } }
+@media (max-width: 760px) {
+  .cfu-summary-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+  .cfu-toolbar { align-items: stretch; }
+  .cfu-toolbar > select, .cfu-toolbar > label, .cfu-toolbar > label input { width: 100%; }
+  .cfu-toolbar > .light-button { width: fit-content; }
+  .cfu-selected-invoice, .cfu-detail-hero { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) { .cfu-summary-grid { grid-template-columns: 1fr; } }
+
+
+
+
+/* Error boundary fallback. Deliberately self-contained so a failed section still
+   renders legibly even when the rest of the app is in a bad state. */
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 16px 18px;
+  border: 1px solid #f0c4c4;
+  border-left: 3px solid #c0392b;
+  border-radius: 8px;
+  background: #fdf6f6;
+}
+.error-boundary h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8c2f22;
+}
+.error-boundary p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #4a3b38;
+  overflow-wrap: anywhere;
+}
+
+/* ----------------------------------------
+   TAX MANAGEMENT - ICON ACTION BUTTONS
+   ---------------------------------------- */
+
+/* The row-action controls on the three Tax Management tables (Tax Calculation,
+   Tax Records, Tax Filing Preparation) were rendering three different looks:
+   - Tax Calculation used .row-actions buttons, which are 25px squares with a
+     4px radius and near-square corners.
+   - Tax Records and Tax Filing used .vendor-row-actions buttons, which have no
+     rule of their own at all, so they fell back to the unstyled browser default.
+   Only .tax-icon-btn is applied by these pages, so the same square treatment used
+   elsewhere in PrimePower (Supplier Payment, Vendor Payment, contracts) is left
+   untouched. */
+.tax-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid #cfe0ee;
+  border-radius: 9px;
+  background: #f4f9fd;
+  color: #55708c;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+/* Overrides the 25px/4px-radius box that .row-actions button sets, so Tax
+   Calculation matches the other two pages instead of inheriting a smaller
+   control from the shared rule. */
+.row-actions button.tax-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+}
+
+.tax-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tax-icon-btn:hover:not(:disabled) {
+  background: #e7f2fa;
+  border-color: #9dc4de;
+  color: #2f5f86;
+}
+
+.tax-icon-btn:focus-visible {
+  outline: 2px solid #5599c4;
+  outline-offset: 2px;
+}
+
+.tax-icon-btn:disabled {
+  opacity: .45;
+  cursor: wait;
+}
+
+/* The "More" overflow menu, used by Tax Calculation (and also by Vendor Payment
+   and Office Expense). These two class names had no rules at all, so the popover
+   rendered as an unstyled block in normal flow and stretched its table row when
+   opened. Anchored to the button instead, matching .sp-more above. */
+.row-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.row-menu-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  min-width: 190px;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid #cbdde8;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(16, 42, 67, 0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+.row-menu-popover button {
+  width: 100%;
+  display: block;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #203a4e;
+  font-size: 11px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row-menu-popover button:hover:not(:disabled) {
+  background: #f0f9fc;
+  color: #159bd3;
+}
+
+.row-menu-popover button:disabled {
+  color: #a9bcc9;
+  cursor: not-allowed;
+}
+
+.compliance-workflow-panel {
+  margin: 20px 0;
+  padding: 22px 22px 16px;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+}
+
+.compliance-workflow-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.compliance-eyebrow {
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.compliance-workflow-header h3 {
+  margin: 4px 0 3px;
+  color: #14243b;
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.compliance-workflow-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.compliance-stage-total {
+  flex: 0 0 auto;
+  padding: 7px 11px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.compliance-workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.compliance-workflow-step {
+  position: relative;
+  display: flex;
+  min-height: 168px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 13px 12px 12px;
+  border: 1px solid #e1e8f1;
+  border-top: 3px solid #dbe4f0;
+  border-radius: 12px;
+  background: #fff;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.compliance-workflow-step:not(.is-last)::after {
+  position: absolute;
+  top: 27px;
+  right: -12px;
+  z-index: 1;
+  width: 11px;
+  height: 2px;
+  background: #cbd5e1;
+  content: "";
+}
+
+.compliance-workflow-step.is-active {
+  border-color: color-mix(in srgb, var(--step-accent) 30%, #e1e8f1);
+  border-top-color: var(--step-accent);
+  background: linear-gradient(180deg, var(--step-tone) 0%, #fff 68%);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.055);
+}
+
+.compliance-workflow-step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.compliance-step-heading {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.compliance-step-number {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid #dbe4f0;
+  border-radius: 50%;
+  background: #fff;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.compliance-workflow-step.is-active .compliance-step-number {
+  border-color: var(--step-accent);
+  background: var(--step-accent);
+  color: #fff;
+}
+
+.compliance-step-count {
+  min-width: 26px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 750;
+  text-align: center;
+}
+
+.compliance-workflow-step.is-active .compliance-step-count {
+  background: var(--step-tone);
+  color: var(--step-accent);
+}
+
+.compliance-workflow-step h4 {
+  margin: 12px 0 4px;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.compliance-workflow-step p {
+  min-height: 28px;
+  margin: 0 0 10px;
+  color: #64748b;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.compliance-step-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  color: var(--step-accent);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.compliance-step-status span {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--step-accent);
+}
+
+.compliance-workflow-step small {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 9px;
+}
+
+.compliance-workflow-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 11px;
+  border-top: 1px solid #e8edf4;
+  color: #64748b;
+  font-size: 10px;
+}
+
+@media (max-width: 1200px) {
+  .compliance-workflow-steps { grid-template-columns: repeat(4, minmax(150px, 1fr)); }
+  .compliance-workflow-step:nth-child(4)::after { display: none; }
+}
+
+@media (max-width: 700px) {
+  .compliance-workflow-panel { padding: 16px 14px 12px; }
+  .compliance-workflow-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .compliance-workflow-step { min-height: 154px; }
+  .compliance-workflow-step::after { display: none; }
+  .compliance-workflow-footer { flex-direction: column; }
 }

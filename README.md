@@ -20,7 +20,7 @@ A React + Vite financial management dashboard designed for a manpower/agency bus
 ## Run locally
 
 1. Install Node.js.
-2. Open this project folder in a terminal.
+2. Open the `frontend` folder in a terminal.
 3. Run:
 
 ```bash
@@ -28,7 +28,7 @@ npm install
 npm run dev
 ```
 
-4. Open the local Vite URL shown in the terminal.
+The dev command starts the backend, waits for its database to be ready, then starts Vite. Open `http://127.0.0.1:5173` after it appears in the terminal. Stop both servers with Ctrl+C.
 
 ## Notes
-This version is a front-end prototype. Data is stored in React state and resets when the page is refreshed. For production, connect it to a backend such as PHP/MySQL, Node/Express, Laravel, or Supabase.
+The app uses the Node/Express backend in `../Backend` and PostgreSQL settings in `../Backend/.env`.

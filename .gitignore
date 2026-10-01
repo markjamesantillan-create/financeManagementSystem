@@ -3,3 +3,9 @@ node_modules
 .mcp.json
 deploy_screenshots/
 downloaded_files/
+
+# Build output and local notes: rebuilt by the Dockerfile (npm ci + vite build),
+# so neither needs to live in the repository.
+dist/
+memories/
+

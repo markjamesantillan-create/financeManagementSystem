@@ -1,0 +1,433 @@
+/* These are columns of the surrounding .ai-budget-card, not cards of their own. The card
+   already supplies the border, background and radius, so giving each column a second set
+   drew a box inside a box and left a gap around it. A hairline on the left edge is what
+   separates the three sections in the reference layout.
+
+   No min-height anywhere: a fixed height here is what previously stretched the plot and left
+   an empty band beneath the legend. Each column is exactly as tall as its own content, and
+   `align-items` stays default so the columns share the tallest row while their content stays
+   top-aligned. */
+.live-status-card,
+.cash-flow-card {
+  min-width: 0;
+}
+
+.live-status-card {
+  padding-left: 18px;
+  border-left: 1px solid var(--border-light);
+}
+
+.cash-flow-card {
+  padding-left: 18px;
+  border-left: 1px solid var(--border-light);
+}
+
+.live-dashboard-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-bottom: 10px;
+
+  color: #244a5d;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #20ae83;
+
+  box-shadow: 0 0 0 2px rgba(32, 174, 131, 0.08);
+}
+
+.live-clock {
+  margin-top: 2px;
+
+  color: #183247;
+
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.live-date {
+  margin-top: 3px;
+
+  color: #8b9ba7;
+
+  font-size: 9px;
+}
+
+.dashboard-details {
+  /* Sits the rows directly under the date. The previous 32px gap opened a band of dead
+     space inside the column, which is where the card looked unfilled. */
+  margin-top: 18px;
+}
+
+.dashboard-row {
+  min-height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #e6eef3;
+}
+
+.dashboard-row:last-child {
+  border-bottom: none;
+}
+
+.dashboard-label {
+  color: #78909e;
+
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.dashboard-value {
+  color: #314c5d;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-align: right;
+}
+
+/* The net figure is a button so it can be revealed on click, matching the masked amounts
+   elsewhere on the Dashboard. It has to look like the plain values beside it. */
+.live-amount-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  min-width: 46px;
+}
+
+.live-amount-toggle:hover {
+  color: #159b69;
+}
+
+.status-value.online {
+  color: #20ae83;
+}
+
+.status-value.offline {
+  color: #e45d5d;
+}
+
+.refresh-value {
+  color: #344d5e;
+}
+
+.cash-flow-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+}
+
+.cash-flow-title {
+  color: #36566a;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.cash-flow-live {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  color: #20ae83;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.small-live-dot {
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #20ae83;
+}
+
+/* min-height rather than a fixed 125px: the plot below scales itself from its own viewBox, so
+   a box with a height of its own either letterboxed the drawing or let it spill over the
+   legend. The floor is only there so the card does not jump in height while it loads. */
+.cash-flow-chart {
+  width: 100%;
+  min-height: 125px;
+
+  position: relative;
+}
+
+.chart-loading,
+.chart-empty {
+  width: 100%;
+  min-height: 125px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #8da0ac;
+
+  font-size: 10px;
+}
+
+.cash-flow-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-top: 1px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  color: #758b99;
+
+  font-size: 8px;
+}
+
+.legend-square {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 1px;
+}
+
+.legend-square.expenses {
+  background: #b6d2f6;
+}
+
+/* Both halves of the key follow the line the chart actually paints (#12a66b in
+   .cf-line/.cf-point below), not the greener tone the old library stroke used. */
+.legend-line {
+  position: relative;
+
+  width: 9px;
+  height: 2px;
+
+  background: #12a66b;
+}
+
+.legend-line::after {
+  content: "";
+
+  position: absolute;
+
+  width: 3px;
+  height: 3px;
+
+  top: -1px;
+  left: 3px;
+
+  border-radius: 50%;
+
+  background: #12a66b;
+}
+
+/* ===========================================================================
+   The Cash Flow Trend plot (CashFlowGraph.jsx)
+
+   Colours and geometry follow the Dashboard's live-flow graph, which this replaces: the same
+   light-blue expense bars with the current month in solid blue, the same green net line with
+   a white-haloed marker, the same dashed grid and 8px month labels. Two panels both headed
+   "Cash Flow Trend" should look like one chart, not two.
+
+   The motion is what makes it read as live, and all of it is driven by the data rather than a
+   timer: the bars rise off the zero line, the line draws itself along its normalised length,
+   a soft highlight runs the length of it, and the current month keeps pulsing.
+   =========================================================================== */
+.cash-flow-graph {
+  width: 100%;
+}
+
+/* height:auto lets the 360x150 viewBox scale to whatever the column is. That is the whole
+   point of hand-building the plot: there is no measurement to be sized wrongly by. */
+.cash-flow-graph svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cf-grid-line {
+  stroke: #e6eef4;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+/* Only drawn once a month spends more than it takes in: the level the net falls below. */
+.cf-zero-line {
+  stroke: #cfdee8;
+  stroke-width: 1;
+}
+
+.cf-bar {
+  fill: #b6d2f6;
+
+  /* The transform origin is set inline per bar, because it is the zero line's y in user space
+     and a stylesheet cannot know where the data put it. view-box keeps those units meaningful
+     rather than resolving them against the element's own bounding box. */
+  transform-box: view-box;
+
+  animation: cf-bar-rise 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.cf-bar.active {
+  fill: #2c78df;
+}
+
+.cf-line {
+  fill: none;
+  stroke: #12a66b;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+
+  /* pathLength="1" on the path makes a dash of 1 the entire line, so an offset of 1 hides it
+     and animating to 0 is the line being drawn. */
+  stroke-dasharray: 1;
+
+  animation: cf-line-draw 0.9s ease-out both;
+}
+
+/* One short dash travelling the full length. Reads as the figure updating rather than as
+   decoration, and it needs no clock of its own to stay honest about the data. */
+.cf-sweep {
+  fill: none;
+  stroke: #12a66b;
+  stroke-width: 5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+
+  opacity: 0.28;
+  stroke-dasharray: 0.08 0.92;
+
+  animation: cf-sweep-run 3.6s linear infinite;
+}
+
+.cf-point {
+  fill: #12a66b;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+/* The live month carries the fatter halo so it stays legible sitting on top of its own bar. */
+.cf-point.active {
+  stroke-width: 2.5;
+}
+
+.cf-pulse {
+  fill: none;
+  stroke: #12a66b;
+  stroke-width: 1.5;
+
+  transform-box: view-box;
+
+  animation: cf-pulse-ring 1.9s ease-out infinite;
+}
+
+.cf-label {
+  fill: #8b9ca7;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+@keyframes cf-bar-rise {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes cf-line-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cf-sweep-run {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cf-pulse-ring {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.6);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
+/* A chart that moves every thirty seconds is exactly the motion some people cannot have on
+   screen. The figures stay; only the movement goes. */
+@media (prefers-reduced-motion: reduce) {
+  .cf-bar,
+  .cf-line,
+  .cf-pulse {
+    animation: none;
+  }
+
+  /* The draw-in leaves the line hidden at offset 1, so the resting state has to be stated. */
+  .cf-line {
+    stroke-dashoffset: 0;
+  }
+
+  /* A travelling highlight has no useful resting state; leave it undrawn. */
+  .cf-sweep {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  /* The parent card drops to one column at this width (see index.css). The dividers have to
+     turn horizontal with it, otherwise each stacked section keeps a stray left rule. */
+  .live-status-card,
+  .cash-flow-card {
+    border-left: 0;
+    border-top: 1px solid var(--border-light);
+    padding-left: 0;
+    padding-top: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .live-clock {
+    font-size: 16px;
+  }
+}
