@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RevealableText from "../../components/RevealableText";
 import {
   Printer,
   RotateCcw,
@@ -770,7 +771,7 @@ function ClientPaymentHistoryPage({ onAudit, navigate }) {
                     <tr key={key} onClick={() => openDetail(payment)}>
                       <td className="link-cell">{payment.payment_id}</td>
                       <td className="strong-cell">
-                        {display(payment.client_name)}
+                        <RevealableText value={display(payment.client_name)} />
                       </td>
                       <td>{display(payment.contract_id)}</td>
                       <td>{display(payment.invoice_number)}</td>
@@ -892,7 +893,7 @@ function ClientPaymentHistoryPage({ onAudit, navigate }) {
               <div>
                 <h2>Payment Details — {detail.payment?.payment_id || ""}</h2>
                 <p>
-                  {display(detail.payment?.client_name)}
+                  <RevealableText value={display(detail.payment?.client_name)} />
                   {detail.payment?.invoice_number
                     ? ` • ${detail.payment.invoice_number}`
                     : ""}
@@ -926,7 +927,7 @@ function ClientPaymentHistoryPage({ onAudit, navigate }) {
                       </div>
                       <div>
                         <dt>Client</dt>
-                        <dd>{display(detail.payment.client_name)}</dd>
+                        <dd><RevealableText value={display(detail.payment.client_name)} /></dd>
                       </div>
                       <div>
                         <dt>Contract</dt>
@@ -1000,7 +1001,7 @@ function ClientPaymentHistoryPage({ onAudit, navigate }) {
                       </div>
                       <div>
                         <dt>Bank Account</dt>
-                        <dd>{display(detail.payment.bank_account)}</dd>
+                        <dd><RevealableText value={display(detail.payment.bank_account)} /></dd>
                       </div>
                       <div>
                         <dt>Reference No.</dt>
@@ -1093,4 +1094,3 @@ function ClientPaymentHistoryPage({ onAudit, navigate }) {
 }
 
 export default ClientPaymentHistoryPage;
-

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RevealableText from "../../components/RevealableText";
 import {
   AlertTriangle,
   Clock3,
@@ -413,7 +414,7 @@ function CollectionMonitoringPage({ onAudit, navigate }) {
                 <tr key={record.collection_id}>
                   <td className="link-cell">{record.collection_id}</td>
                   <td className="strong-cell">
-                    {record.client_name}<small>{record.invoice_no} · {record.contract_no}</small>
+                    <RevealableText value={record.client_name} /><small>{record.invoice_no} · {record.contract_no}</small>
                   </td>
                   <td className="money-cell">
                     {rowAmount(record, "amount-due", record.amount_due, "amount due", "cm-amount-due")}
@@ -463,11 +464,11 @@ function CollectionMonitoringPage({ onAudit, navigate }) {
             </div>
             <div className="cm-detail-body">
               <div className={`cm-detail-hero ${statusSlug(detail.collection.status)}`}>
-                <div><span>Client</span><strong>{detail.collection.client_name}</strong><small>{detail.collection.invoice_no}</small></div>
+                <div><span>Client</span><strong><RevealableText value={detail.collection.client_name} /></strong><small>{detail.collection.invoice_no}</small></div>
                 <div><span>Collection Status</span><StatusBadge status={detail.collection.status} /><small>{detail.collection.status_description}</small></div>
-                <div><span>Amount Due</span><strong>{money(detail.collection.amount_due)}</strong></div>
-                <div><span>Amount Collected</span><strong>{money(detail.collection.amount_collected)}</strong></div>
-                <div><span>Remaining Balance</span><strong>{money(detail.collection.remaining_balance)}</strong></div>
+                <div><span>Amount Due</span>{rowAmount(detail.collection, "detail-amount-due", detail.collection.amount_due, "amount due")}</div>
+                <div><span>Amount Collected</span>{rowAmount(detail.collection, "detail-amount-collected", detail.collection.amount_collected, "amount collected")}</div>
+                <div><span>Remaining Balance</span>{rowAmount(detail.collection, "detail-remaining-balance", detail.collection.remaining_balance, "remaining balance")}</div>
                 <div>
                   <span>Collection Progress</span><strong>{detail.collection.progress_percent}%</strong>
                   <CollectionProgress value={detail.collection.progress_percent} compact />
@@ -477,7 +478,7 @@ function CollectionMonitoringPage({ onAudit, navigate }) {
                 <h3>Collection Information</h3>
                 <dl className="cm-detail-grid">
                   <div><dt>Collection ID</dt><dd>{detail.collection.collection_id}</dd></div>
-                  <div><dt>Client ID</dt><dd>{detail.collection.client_id}</dd></div>
+                  <div><dt>Client ID</dt><dd><RevealableText value={detail.collection.client_id} /></dd></div>
                   <div><dt>Invoice No.</dt><dd>{detail.collection.invoice_no}</dd></div>
                   <div><dt>Contract No.</dt><dd>{detail.collection.contract_no}</dd></div>
                   <div><dt>Due Date</dt><dd>{dateLabel(detail.collection.due_date)}</dd></div>
@@ -502,7 +503,7 @@ function CollectionMonitoringPage({ onAudit, navigate }) {
                           <tr key={payment.id}>
                             <td className="link-cell">{payment.payment_id}</td>
                             <td>{dateLabel(payment.payment_date)}</td>
-                            <td className="money-cell">{money(payment.amount_paid)}</td>
+                            <td className="money-cell">{rowAmount(payment, "payment-amount", payment.amount_paid, "payment amount")}</td>
                             <td>{payment.payment_method}</td><td>{payment.status}</td>
                             <td>{payment.official_receipt_number}</td>
                           </tr>

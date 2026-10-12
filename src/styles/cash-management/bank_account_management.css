@@ -1,0 +1,416 @@
+.bank-management-page {
+  display: grid;
+  gap: 18px;
+}
+
+.ba-panel,
+.ba-summary-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ba-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ba-summary-card {
+  display: grid;
+  gap: 9px;
+  min-height: 88px;
+  padding: 15px 17px;
+}
+
+.ba-summary-card > span {
+  color: #475569;
+  font-size: 13px;
+}
+
+.ba-summary-card > strong {
+  color: #111827;
+  font-size: 19px;
+}
+
+.ba-panel {
+  min-width: 0;
+  padding: 16px;
+}
+
+.ba-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 13px;
+}
+
+.ba-panel-heading h3 {
+  margin: 0 0 5px;
+  color: #172b4d;
+  font-size: 16px;
+}
+
+.ba-panel-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ba-account-tools,
+.ba-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ba-account-tools select,
+.ba-search {
+  min-height: 34px;
+  padding: 5px 8px;
+  border: 1px solid #d9e2ec;
+  border-radius: 5px;
+  background: #fff;
+  color: #111827;
+  font: inherit;
+  font-size: 12px;
+}
+
+.ba-search {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ba-search input {
+  width: 150px;
+  border: 0;
+  outline: none;
+}
+
+.ba-tool-button,
+.ba-row-actions button {
+  display: inline-grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 1px solid #d9e2ec;
+  border-radius: 5px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+}
+
+.ba-accounts-table {
+  min-width: 1240px;
+}
+
+.ba-selected-row {
+  background: #eff6ff;
+}
+
+.ba-selected-row td {
+  color: #111827;
+}
+
+.ba-row-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.ba-status {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ba-status-active,
+.ba-status-verified {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.ba-status-pending-verification {
+  background: #fefce8;
+  color: #a16207;
+}
+
+.ba-status-restricted {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.ba-status-suspended {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ba-status-closed {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.ba-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ba-detail-grid > div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #f8fafc;
+}
+
+.ba-detail-grid small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.ba-detail-grid b {
+  overflow-wrap: anywhere;
+  color: #111827;
+  font-size: 13px;
+}
+
+.ba-transactions-table {
+  min-width: 1350px;
+}
+
+.ba-alert-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ba-alert {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  color: #334155;
+  font-size: 12px;
+}
+
+.ba-alert-low-balance,
+.ba-alert-reconciliation-difference {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #a16207;
+}
+
+.ba-alert-restricted-account,
+.ba-alert-suspended-account {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.ba-alert-large-transaction {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.ba-empty {
+  margin: 18px 0;
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+}
+
+.ba-modal {
+  width: min(800px, calc(100vw - 32px));
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.ba-modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+@media (max-width: 1100px) {
+  .ba-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ba-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .ba-summary-grid,
+  .ba-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ba-panel-heading {
+    display: grid;
+  }
+}
+
+@media print {
+  .bank-management-page > .page-header .page-actions,
+  .ba-account-tools,
+  .ba-actions,
+  .ba-row-actions {
+    display: none !important;
+  }
+}
+
+.bank-management-page > .page-header {
+  align-items: center;
+  padding: 20px 22px;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  background: linear-gradient(115deg, #eff6ff 0%, #fff 68%);
+  box-shadow: 0 8px 24px rgba(30, 64, 120, 0.06);
+}
+
+.bank-management-page > .page-header h2,
+.ba-panel-heading h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.bank-management-page > .page-header h2 {
+  color: #123b70;
+}
+
+.bank-management-page > .page-header h2 svg,
+.ba-panel-heading h3 svg {
+  color: #2563eb;
+}
+
+.ba-panel,
+.ba-summary-card {
+  border-color: #e4eaf2;
+  border-radius: 13px;
+  box-shadow: 0 5px 18px rgba(15, 35, 65, 0.045);
+}
+
+.ba-summary-card {
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+  min-height: 108px;
+  padding: 14px;
+  border-top: 3px solid var(--ba-accent, #2563eb);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.ba-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(15, 35, 65, 0.09);
+}
+
+.ba-summary-0 { --ba-accent: #2563eb; --ba-icon-bg: #eff6ff; }
+.ba-summary-1 { --ba-accent: #059669; --ba-icon-bg: #ecfdf5; }
+.ba-summary-2 { --ba-accent: #0891b2; --ba-icon-bg: #ecfeff; }
+.ba-summary-3 { --ba-accent: #d97706; --ba-icon-bg: #fffbeb; }
+.ba-summary-4 { --ba-accent: #dc2626; --ba-icon-bg: #fef2f2; }
+
+.ba-summary-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--ba-icon-bg);
+  color: var(--ba-accent);
+}
+
+.ba-summary-content {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.ba-summary-content > span {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ba-summary-content > strong {
+  color: #101828;
+  font-size: clamp(15px, 1.35vw, 18px);
+  overflow-wrap: anywhere;
+}
+
+.ba-summary-content > small {
+  color: #8490a2;
+  font-size: 10px;
+}
+
+.ba-panel-heading {
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.ba-panel-heading h3 {
+  color: #173b6c;
+}
+
+.ba-account-tools select,
+.ba-search,
+.ba-tool-button,
+.ba-row-actions button {
+  border-radius: 8px;
+}
+
+.ba-accounts-table thead th {
+  background: #f5f8fc;
+  color: #34445d;
+  font-size: 11px;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.ba-accounts-table tbody tr {
+  transition: background-color 120ms ease;
+}
+
+.ba-accounts-table tbody tr:hover {
+  background: #f6faff;
+}
+
+.ba-accounts-table .ba-selected-row,
+.ba-accounts-table .ba-selected-row:hover {
+  background: #eaf3ff;
+  box-shadow: inset 3px 0 #2563eb;
+}
+
+.ba-detail-grid > div {
+  padding: 13px;
+  border-color: #e5ebf3;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #fff, #f8fafc);
+}
+
+@media (max-width: 700px) {
+  .bank-management-page > .page-header {
+    align-items: stretch;
+    padding: 16px;
+  }
+}

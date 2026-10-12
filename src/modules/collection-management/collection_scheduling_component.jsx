@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RevealableAmount from "../../components/RevealableAmount";
+import RevealableText from "../../components/RevealableText";
 import {
   CalendarClock,
   Printer,
@@ -714,7 +716,7 @@ function CollectionSchedulingPage({ onAudit, navigate }) {
           <p><b>Client:</b> ${display(schedule.client_name)}</p>
           <p><b>Contract:</b> ${display(schedule.contract_id)}</p>
           <p><b>Invoice:</b> ${display(schedule.invoice_no)}</p>
-          <p><b>Outstanding Amount:</b> ${money(schedule.outstanding_amount)}</p>
+          <p><b>Outstanding Amount:</b> <RevealableAmount value={money(schedule.outstanding_amount)} /></p>
           <p><b>Invoice Due Date:</b> ${display(schedule.due_date)}</p>
           <p><b>Scheduled Collection Date:</b> ${display(schedule.scheduled_collection_date)}</p>
           <p><b>Follow-up Date:</b> ${display(schedule.follow_up_date)}</p>
@@ -1155,8 +1157,8 @@ function CollectionSchedulingPage({ onAudit, navigate }) {
                         value={String(invoice.id)}
                         disabled={Boolean(invoice.open_schedule_id)}
                       >
-                        {invoice.invoice_no} · {invoice.client_name} ·{" "}
-                        {money(invoice.outstanding_amount)}
+                        {invoice.invoice_no} · <RevealableText value={invoice.client_name} /> ·{" "}
+                        <RevealableAmount value={money(invoice.outstanding_amount)} />
                         {invoice.open_schedule_id
                           ? ` (already scheduled: ${invoice.open_schedule_id})`
                           : ""}

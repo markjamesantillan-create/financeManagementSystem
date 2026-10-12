@@ -1,4 +1,4 @@
-// Renders TaxFilingPreparationPage and TaxFilingCreateModal from the real App.jsx to
+// Renders TaxFilingPreparationPage and TaxFilingCreateModal from the extracted tax pages to
 // confirm neither throws on the code path that previously failed with
 // "TAX_FILING_TAX_TYPES is not defined".
 //
@@ -17,7 +17,7 @@ const React = require("react");
 const fs = require("fs");
 const path = require("path");
 
-const APP = path.join(__dirname, "src", "App.jsx");
+const TAX_PAGES = path.join(__dirname, "src", "pages", "TaxManagementPages.jsx");
 
 let pass = 0;
 let fail = 0;
@@ -40,7 +40,7 @@ const iconProxy = new Proxy({}, { get: () => ProxyFn });
 // the file. Instead the parameter list is matched first, then the body braces.
 function extract(source, header) {
   const start = source.indexOf(header);
-  if (start < 0) throw new Error("Could not find " + header + " in App.jsx");
+  if (start < 0) throw new Error("Could not find " + header + " in TaxManagementPages.jsx");
 
   // A plain constant assignment (`const X = [...]`) has no parameter list, so match the
   // brackets of the value directly.
@@ -89,7 +89,7 @@ function extract(source, header) {
 }
 
 function loadModule(names) {
-  const source = fs.readFileSync(APP, "utf8");
+  const source = fs.readFileSync(TAX_PAGES, "utf8");
   const parts = names.map((n) => extract(source, n.header));
   const code = parts.join("\n\n") + "\n" + names
     .map((n) => `module.exports.${n.export} = ${n.name};`)

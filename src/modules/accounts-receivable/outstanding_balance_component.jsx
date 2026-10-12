@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Printer, RotateCcw, Clock3 } from "lucide-react";
+import RevealableAmount from "../../components/RevealableAmount";
+import RevealableText from "../../components/RevealableText";
 
 // Outstanding Balance Tracking reads GET /api/receivables/outstanding from the
 // Node backend. Empty API_BASE uses the Vite proxy in local dev; set
@@ -59,7 +61,6 @@ function OutstandingBalancePage({ onAudit, navigate }) {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All Status");
-  const [revealedSummary, setRevealedSummary] = useState({});
 
   useEffect(() => {
     let cancelled = false;
@@ -125,9 +126,6 @@ function OutstandingBalancePage({ onAudit, navigate }) {
     return { totalOutstanding, overdueTotal, overdueCount };
   }, [outstandingBalances]);
 
-  const toggleSummaryAmount = (key) =>
-    setRevealedSummary((prev) => ({ ...prev, [key]: !prev[key] }));
-
   if (loading) {
     return (
       <section className="management-page outstanding-balance-page">
@@ -182,43 +180,17 @@ function OutstandingBalancePage({ onAudit, navigate }) {
       </div>
 
       <div className="vendor-summary-grid">
-        <div
-          className="vendor-summary-card"
-          role="button"
-          tabIndex={0}
-          title="Click to show / hide amount"
-          onClick={() => toggleSummaryAmount("outstanding")}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") toggleSummaryAmount("outstanding");
-          }}
-        >
+        <div className="vendor-summary-card">
           <span className="vendor-summary-label">Total Outstanding</span>
-          <strong
-            className={`vendor-summary-amount ${
-              revealedSummary.outstanding ? "overdue-amount" : ""
-            }`}
-          >
-            {revealedSummary.outstanding ? money(totals.totalOutstanding) : "*"}
+          <strong className="vendor-summary-amount overdue-amount">
+            <RevealableAmount value={money(totals.totalOutstanding)} />
           </strong>
         </div>
 
-        <div
-          className="vendor-summary-card"
-          role="button"
-          tabIndex={0}
-          title="Click to show / hide amount"
-          onClick={() => toggleSummaryAmount("overdue")}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") toggleSummaryAmount("overdue");
-          }}
-        >
+        <div className="vendor-summary-card">
           <span className="vendor-summary-label">Overdue Balance</span>
-          <strong
-            className={`vendor-summary-amount ${
-              revealedSummary.overdue ? "overdue-amount" : ""
-            }`}
-          >
-            {revealedSummary.overdue ? money(totals.overdueTotal) : "*"}
+          <strong className="vendor-summary-amount overdue-amount">
+            <RevealableAmount value={money(totals.overdueTotal)} />
           </strong>
         </div>
 
@@ -299,13 +271,13 @@ function OutstandingBalancePage({ onAudit, navigate }) {
                 filtered.map((item) => (
                   <tr key={item.id ?? item.invoice_number}>
                     <td className="link-cell">{item.invoice_number}</td>
-                    <td className="strong-cell">{item.client_name}</td>
+                    <td className="strong-cell"><RevealableText value={item.client_name} /></td>
                     <td>{item.invoice_date || "—"}</td>
                     <td>{item.due_date || "—"}</td>
-                    <td className="money-cell">{money(item.invoice_amount)}</td>
-                    <td className="money-cell">{money(item.amount_paid)}</td>
+                    <td className="money-cell"><RevealableAmount value={money(item.invoice_amount)} /></td>
+                    <td className="money-cell"><RevealableAmount value={money(item.amount_paid)} /></td>
                     <td className="money-cell">
-                      {money(item.outstanding_balance)}
+                      <RevealableAmount value={money(item.outstanding_balance)} />
                     </td>
                     <td
                       className={
@@ -338,4 +310,3 @@ function OutstandingBalancePage({ onAudit, navigate }) {
 }
 
 export default OutstandingBalancePage;
-

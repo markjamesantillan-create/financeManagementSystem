@@ -73,6 +73,13 @@ function backendStartupPlugin() {
 
 export default defineConfig({
   plugins: [react(), backendStartupPlugin()],
+  assetsInclude: [
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.png",
+    "**/*.gif",
+    "**/*.svg",
+  ],
   server: {
     host: "127.0.0.1",
     port: 5173,

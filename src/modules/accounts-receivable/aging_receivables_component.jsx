@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RevealableText from "../../components/RevealableText";
 import {
   Printer,
   RotateCcw,
@@ -604,7 +605,7 @@ function AgingReceivablesPage({ onAudit, navigate }) {
                 filtered.map((item) => (
                   <tr key={item.id ?? item.invoice_number}>
                     <td className="link-cell">{item.invoice_number}</td>
-                    <td className="strong-cell">{item.client_name}</td>
+                    <td className="strong-cell"><RevealableText value={item.client_name} /></td>
                     <td>{item.due_date || "—"}</td>
                     <td className="money-cell">
                       {maskable(
@@ -751,7 +752,7 @@ function AgingReceivablesPage({ onAudit, navigate }) {
                 <h2>
                   Receivable Details — {detail.row?.invoice_number || ""}
                 </h2>
-                <p>{detail.row?.client_name}</p>
+                <p><RevealableText value={detail.row?.client_name} /></p>
               </div>
               <button type="button" onClick={closeDetail} aria-label="Close">
                 <X size={15} />
@@ -787,7 +788,7 @@ function AgingReceivablesPage({ onAudit, navigate }) {
                       </div>
                       <div>
                         <dt>Client</dt>
-                        <dd>{detail.invoice.client_name}</dd>
+                        <dd><RevealableText value={detail.invoice.client_name} /></dd>
                       </div>
                       <div>
                         <dt>Invoice Date</dt>

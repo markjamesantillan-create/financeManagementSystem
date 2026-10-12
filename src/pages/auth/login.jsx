@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import App from "./App.jsx";
-import logo from "./assets/logo.jpg";
+import App from "../../App.jsx";
+import logo from "../../assets/logo.jpg";
 
 const API_BASE = import.meta.env.VITE_API_URL || "";
 

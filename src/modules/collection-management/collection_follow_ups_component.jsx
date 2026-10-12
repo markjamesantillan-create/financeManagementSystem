@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RevealableAmount from "../../components/RevealableAmount";
+import RevealableText from "../../components/RevealableText";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -568,7 +570,7 @@ function CollectionFollowUpsPage({ onAudit, navigate }) {
                       <option value="">Select an invoice</option>
                       {invoices.map((invoice) => (
                         <option key={invoice.id} value={invoice.invoice_no}>
-                          {invoice.invoice_no} · {invoice.client_name} · {money(invoice.outstanding_balance)}
+                          {invoice.invoice_no} · <RevealableText value={invoice.client_name} /> · <RevealableAmount value={money(invoice.outstanding_balance)} />
                         </option>
                       ))}
                     </select>
@@ -576,8 +578,8 @@ function CollectionFollowUpsPage({ onAudit, navigate }) {
                   </div>
                   {selectedInvoice && (
                     <div className="cfu-selected-invoice full">
-                      <div><span>Client</span><strong>{selectedInvoice.client_name}</strong></div>
-                      <div><span>Current Balance</span><strong>{money(selectedInvoice.outstanding_balance)}</strong></div>
+                      <div><span>Client</span><strong><RevealableText value={selectedInvoice.client_name} /></strong></div>
+                      <div><span>Current Balance</span><strong><RevealableAmount value={money(selectedInvoice.outstanding_balance)} /></strong></div>
                       <div><span>Invoice Due Date</span><strong>{dateLabel(selectedInvoice.due_date)}</strong></div>
                     </div>
                   )}
@@ -651,5 +653,4 @@ function CollectionFollowUpsPage({ onAudit, navigate }) {
 }
 
 export default CollectionFollowUpsPage;
-
 

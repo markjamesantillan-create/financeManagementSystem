@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import RevealableAmount from "../../components/RevealableAmount";
+import RevealableText from "../../components/RevealableText";
 import {
   AlertTriangle,
   Ban,
@@ -436,10 +438,10 @@ function OfficialReceiptGenerationPage({ onAudit, navigate }) {
               {availablePayments.length ? availablePayments.map((payment) => (
                 <tr key={`available-${payment.id}`}>
                   <td className="link-cell">{display(payment.payment_id)}</td>
-                  <td className="strong-cell">{display(payment.client_name)}<small>{display(payment.client_id)}</small></td>
+                  <td className="strong-cell"><RevealableText value={display(payment.client_name)} /><small><RevealableText value={display(payment.client_id)} /></small></td>
                   <td>{display(payment.invoice_no)}<small>{display(payment.contract_no)}</small></td>
                   <td>{dateLabel(payment.receipt_date)}</td>
-                  <td className="money-cell">{money(payment.amount_received)}</td>
+                  <td className="money-cell"><RevealableAmount value={money(payment.amount_received)} /></td>
                   <td><StatusBadge status="Verified" /></td>
                   <td><button type="button" className="or-generate-button" onClick={() => openGenerate(payment)}><ShieldCheck size={13} /> Generate OR</button></td>
                 </tr>
@@ -467,7 +469,7 @@ function OfficialReceiptGenerationPage({ onAudit, navigate }) {
                 <tr key={receipt.id}>
                   <td className="link-cell">{display(receipt.receipt_number)}</td>
                   <td>{display(receipt.receipt_id)}</td>
-                  <td className="strong-cell">{display(receipt.payment_id)}<small>{display(receipt.client_name)}</small></td>
+                  <td className="strong-cell">{display(receipt.payment_id)}<small><RevealableText value={display(receipt.client_name)} /></small></td>
                   <td>{display(receipt.invoice_no)}<small>{display(receipt.contract_no)}</small></td>
                   <td>{dateLabel(receipt.date_issued)}</td>
                   <td className="money-cell">
@@ -505,8 +507,8 @@ function OfficialReceiptGenerationPage({ onAudit, navigate }) {
             <div className="official-receipt-modal-body">
               <div className="or-payment-preview">
                 <StatusBadge status="Verified" />
-                <div><strong>{display(generatePayment.client_name)}</strong><span>{display(generatePayment.payment_id)} · {display(generatePayment.invoice_no)}</span></div>
-                <b>{money(generatePayment.amount_received)}</b>
+                <div><strong><RevealableText value={display(generatePayment.client_name)} /></strong><span>{display(generatePayment.payment_id)} · {display(generatePayment.invoice_no)}</span></div>
+                <b><RevealableAmount value={money(generatePayment.amount_received)} /></b>
               </div>
               <dl className="aging-detail-grid">
                 <div><dt>Payment Date</dt><dd>{dateLabel(generatePayment.receipt_date)}</dd></div>
@@ -534,24 +536,24 @@ function OfficialReceiptGenerationPage({ onAudit, navigate }) {
             </div>
             <div className="official-receipt-modal-body">
               <div className="or-detail-hero">
-                <div><span>Client</span><strong>{display(detail.client_name)}</strong><small>{display(detail.client_id)}</small></div>
-                <div><span>Amount Received</span><strong>{money(detail.amount_received)}</strong><StatusBadge status={detail.status} /></div>
+                <div><span>Client</span><strong><RevealableText value={display(detail.client_name)} /></strong><small><RevealableText value={display(detail.client_id)} /></small></div>
+                <div><span>Amount Received</span><strong><RevealableAmount value={money(detail.amount_received)} /></strong><StatusBadge status={detail.status} /></div>
               </div>
               <dl className="aging-detail-grid">
                 <div><dt>Receipt ID</dt><dd>{display(detail.receipt_id)}</dd></div>
                 <div><dt>Receipt No.</dt><dd>{display(detail.receipt_number)}</dd></div>
                 <div><dt>Payment ID</dt><dd>{display(detail.payment_id)}</dd></div>
                 <div><dt>Payment Date</dt><dd>{dateLabel(detail.receipt_date)}</dd></div>
-                <div><dt>Billing Address</dt><dd>{display(detail.billing_address)}</dd></div>
+                <div><dt>Billing Address</dt><dd><RevealableText value={display(detail.billing_address)} /></dd></div>
                 <div><dt>Invoice No.</dt><dd>{display(detail.invoice_no)}</dd></div>
                 <div><dt>Contract No.</dt><dd>{display(detail.contract_no)}</dd></div>
                 <div><dt>Payment Method</dt><dd>{display(detail.payment_method)}</dd></div>
-                <div><dt>Bank Account</dt><dd>{display(detail.bank_account)}</dd></div>
-                <div><dt>Reference No.</dt><dd>{display(detail.reference_number)}</dd></div>
+                <div><dt>Bank Account</dt><dd><RevealableText value={display(detail.bank_account)} /></dd></div>
+                <div><dt>Reference No.</dt><dd><RevealableText value={display(detail.reference_number)} /></dd></div>
                 <div className="full"><dt>Amount in Words</dt><dd>{display(detail.amount_in_words)}</dd></div>
                 <div className="full"><dt>Payment For</dt><dd>{display(detail.payment_for)}</dd></div>
-                <div><dt>Prepared By</dt><dd>{display(detail.prepared_by)}</dd></div>
-                <div><dt>Verified By</dt><dd>{display(detail.verified_by)}</dd></div>
+                <div><dt>Prepared By</dt><dd><RevealableText value={display(detail.prepared_by)} /></dd></div>
+                <div><dt>Verified By</dt><dd><RevealableText value={display(detail.verified_by)} /></dd></div>
                 <div><dt>OR Status</dt><dd><StatusBadge status={detail.status} /></dd></div>
                 <div><dt>Date Issued</dt><dd>{dateLabel(detail.date_issued)}</dd></div>
                 {detail.status === "Voided" && <div className="full"><dt>Void Reason</dt><dd>{display(detail.void_reason)}</dd></div>}

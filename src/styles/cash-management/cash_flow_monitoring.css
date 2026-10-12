@@ -1,0 +1,568 @@
+.cash-flow-page {
+  display: grid;
+  gap: 18px;
+}
+
+.cf-period-bar,
+.cf-panel,
+.cf-summary-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.cf-period-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+}
+
+.cf-period-options,
+.cf-period-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cf-period-options button,
+.cf-period-date > button {
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid #d9e2ec;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+}
+
+.cf-period-options button.active {
+  border-color: #155eef;
+  background: #eff6ff;
+  color: #155eef;
+  font-weight: 700;
+}
+
+.cf-period-date label {
+  display: grid;
+  gap: 3px;
+  color: #475569;
+  font-size: 12px;
+}
+
+.cf-period-date .cf-account-filter select {
+  min-width: 145px;
+  border: 1px solid #d9e2ec;
+  border-radius: 5px;
+  background: #fff;
+  color: #111827;
+  padding: 4px 7px;
+  font: inherit;
+}
+
+.cf-period-date input {
+  border: 0;
+  color: #111827;
+  font: inherit;
+  font-weight: 600;
+}
+
+.cf-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cf-summary-card {
+  display: grid;
+  gap: 10px;
+  min-height: 94px;
+  padding: 15px 17px;
+}
+
+.cf-summary-card > span {
+  color: #475569;
+  font-size: 13px;
+}
+
+.cf-summary-card > strong {
+  color: #111827;
+  font-size: 19px;
+}
+
+.cf-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cf-panel {
+  min-width: 0;
+  padding: 16px;
+}
+
+.cf-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+
+.cf-panel-heading h3 {
+  margin: 0 0 5px;
+  color: #172b4d;
+  font-size: 16px;
+}
+
+.cf-panel-heading p,
+.cf-forecast-reason {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cf-forecast-status,
+.cf-status,
+.cf-flow-type {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cf-forecast-status {
+  padding: 5px 10px;
+}
+
+.cf-forecast-status.at-risk,
+.cf-alert-negative-cash-flow,
+.cf-alert-low-cash-warning {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.cf-forecast-status.on-track {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.cf-forecast-table {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+}
+
+.cf-forecast-row {
+  display: grid;
+  grid-template-columns: 1.1fr repeat(3, minmax(75px, 1fr));
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: #f8fafc;
+  color: #111827;
+  font-size: 12px;
+}
+
+.cf-forecast-header {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+}
+
+.cf-forecast-row .amount-reveal-toggle {
+  justify-self: start;
+}
+
+.cf-forecast-reason {
+  margin-top: 10px;
+}
+
+.cf-trend-legend {
+  display: flex;
+  gap: 12px;
+  color: #475569;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.cf-legend-in::before,
+.cf-legend-out::before {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 5px;
+  border-radius: 2px;
+  content: "";
+}
+
+.cf-legend-in::before,
+.cf-trend-in {
+  background: #16a34a;
+}
+
+.cf-legend-out::before,
+.cf-trend-out {
+  background: #dc2626;
+}
+
+.cf-trend-chart {
+  display: flex;
+  align-items: stretch;
+  gap: 5px;
+  min-height: 170px;
+  overflow-x: auto;
+  padding: 10px 4px 0;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.cf-trend-column {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 22px;
+  flex: 1 0 24px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cf-trend-quarterly .cf-trend-column,
+.cf-trend-yearly .cf-trend-column {
+  flex-basis: 52px;
+}
+
+.cf-trend-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 140px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cf-trend-bar {
+  display: block;
+  width: min(35%, 18px);
+  min-height: 2px;
+  border-radius: 3px 3px 0 0;
+}
+
+.cf-trend-column small {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 10px;
+  line-height: 22px;
+  text-overflow: clip;
+}
+
+.cf-alert-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-alert {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  color: #334155;
+  font-size: 12px;
+}
+
+.cf-alert b {
+  color: inherit;
+}
+
+.cf-alert-unreconciled-transaction {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #a16207;
+}
+
+.cf-empty {
+  margin: 18px 0;
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+}
+
+.cf-transactions-table {
+  min-width: 1320px;
+}
+
+.cf-flow-type,
+.cf-status {
+  padding: 4px 8px;
+}
+
+.cf-type-cash-inflow {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.cf-type-cash-outflow {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.cf-type-transfer {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.cf-type-adjustment {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.cf-status-completed {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.cf-status-recorded {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.cf-status-pending {
+  background: #fefce8;
+  color: #a16207;
+}
+
+.cf-status-pending-reconciliation {
+  background: #fefce8;
+  color: #a16207;
+}
+
+.cf-status-for-approval {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.cf-status-rejected {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.cf-status-reconciled {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.cf-status-cancelled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.cf-action {
+  padding: 5px 8px;
+  border: 1px solid #c7d2fe;
+  border-radius: 5px;
+  background: #eef2ff;
+  color: #3730a3;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cf-action:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.cf-modal {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.cf-modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+@media (max-width: 1050px) {
+  .cf-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cf-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .cf-period-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cf-period-options {
+    overflow-x: auto;
+  }
+
+  .cf-period-options button {
+    flex: 1;
+  }
+
+  .cf-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-forecast-row {
+    grid-template-columns: 1fr repeat(3, minmax(55px, 1fr));
+    gap: 4px;
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+}
+
+.cash-flow-page > .page-header {
+  align-items: center;
+  padding: 20px 22px;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  background: linear-gradient(115deg, #f0f7ff 0%, #fff 68%);
+  box-shadow: 0 8px 24px rgba(30, 64, 120, 0.06);
+}
+
+.cash-flow-page > .page-header h2,
+.cf-panel-heading h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.cash-flow-page > .page-header h2 {
+  color: #123b70;
+}
+
+.cash-flow-page > .page-header h2 svg,
+.cf-panel-heading h3 svg {
+  color: #2563eb;
+}
+
+.cf-period-bar,
+.cf-panel {
+  border-color: #e4eaf2;
+  border-radius: 13px;
+  box-shadow: 0 5px 18px rgba(15, 35, 65, 0.045);
+}
+
+.cf-period-bar {
+  padding: 14px 16px;
+  background: linear-gradient(100deg, #fff, #f8fbff);
+}
+
+.cf-period-options button,
+.cf-period-date > button {
+  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.cf-period-options button:hover,
+.cf-period-date > button:hover {
+  border-color: #93c5fd;
+  background: #f5f9ff;
+}
+
+.cf-summary-card {
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 110px;
+  padding: 17px;
+  border-color: #e4eaf2;
+  border-left: 3px solid var(--cf-accent, #2563eb);
+  border-radius: 13px;
+  box-shadow: 0 6px 18px rgba(15, 35, 65, 0.05);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.cf-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(15, 35, 65, 0.09);
+}
+
+.cf-summary-0 { --cf-accent: #2563eb; --cf-icon-bg: #eff6ff; }
+.cf-summary-1 { --cf-accent: #059669; --cf-icon-bg: #ecfdf5; }
+.cf-summary-2 { --cf-accent: #dc2626; --cf-icon-bg: #fef2f2; }
+.cf-summary-3 { --cf-accent: #7c3aed; --cf-icon-bg: #f5f3ff; }
+.cf-summary-4 { --cf-accent: #0891b2; --cf-icon-bg: #ecfeff; }
+.cf-summary-5 { --cf-accent: #d97706; --cf-icon-bg: #fffbeb; }
+
+.cf-summary-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--cf-icon-bg);
+  color: var(--cf-accent);
+}
+
+.cf-summary-content {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+}
+
+.cf-summary-content > span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cf-summary-content > strong {
+  color: #101828;
+  font-size: clamp(15px, 1.5vw, 19px);
+  overflow-wrap: anywhere;
+}
+
+.cf-trend-chart {
+  min-height: 190px;
+  padding: 18px 12px 8px;
+  border: 1px solid #edf2f8;
+  border-radius: 11px;
+  background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+}
+
+.cf-trend-bars {
+  border-bottom: 1px dashed #d8e2ef;
+}
+
+.cf-trend-bar {
+  min-height: 4px;
+  border-radius: 5px 5px 1px 1px;
+  box-shadow: 0 2px 5px rgba(15, 35, 65, 0.12);
+}
+
+.cf-forecast-row:not(.cf-forecast-header) {
+  min-height: 50px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.cf-forecast-row:not(.cf-forecast-header):last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .cash-flow-page > .page-header {
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .cf-summary-card {
+    min-height: 92px;
+  }
+}
