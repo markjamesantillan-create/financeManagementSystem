@@ -7578,6 +7578,243 @@ button.amount-reveal-toggle {
 /* Ten badges: yellow pending, blue for-approval, purple approved, orange
    processing, green released/confirmed/reconciled, dark-blue partial,
    red failed, grey cancelled. */
+/* =========================================================
+   ARCHIVE MANAGEMENT — Archived Records
+   Scoped additions for the centralized archive page: filter
+   bar, row icon actions, and the record detail modal. Reuses
+   the shared .stat-card-new, .table-card, .modal, .row-actions
+   and .contract-status systems; only the new pieces live here.
+   ========================================================= */
+
+.archive-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  box-shadow: var(--shadow);
+}
+
+.archive-filters .filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 130px;
+}
+
+.archive-filters .filter-field label {
+  color: #657d8b;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.archive-filters .filter-field select {
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #fbfdfe;
+  color: #354d5d;
+  outline: none;
+  font-size: 10px;
+  font-family: inherit;
+}
+
+.archive-filters .filter-field select:focus {
+  border-color: #72bddb;
+  box-shadow: 0 0 0 2px rgba(21, 155, 211, 0.08);
+}
+
+.archive-filters .filter-search {
+  flex: 1;
+  min-width: 180px;
+}
+
+.archive-filters .filter-search .search-box {
+  width: 100%;
+}
+
+/* Icon-only action buttons in table rows. Matches the .row-actions button
+   footprint (25px square) but is defined standalone so it can also be used
+   inside the modal header. */
+.icon-button {
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #ffffff;
+  color: #738996;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: #edf7fb;
+  color: var(--primary);
+}
+
+.icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-button.danger:hover:not(:disabled) {
+  background: #fff0f0;
+  color: #d85252;
+  border-color: #f2c9c9;
+}
+
+/* The modal-header close button should share the icon-button look. */
+.modal-header .icon-button {
+  border: 0;
+  background: #f3f7f9;
+  color: #718692;
+}
+
+.modal-header .icon-button:hover:not(:disabled) {
+  background: #e7f5fb;
+  color: var(--primary);
+}
+
+/* Slightly wider modal so the two-column detail grid reads comfortably. */
+.archive-modal {
+  width: min(720px, 100%);
+}
+
+.archive-modal .modal-body {
+  padding: 18px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 18px;
+}
+
+.detail-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.detail-label {
+  color: #8295a2;
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-grid > div > span:last-child {
+  color: #314a5b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.detail-reason {
+  margin-top: 16px;
+}
+
+.detail-reason p {
+  margin-top: 4px;
+  color: #4a6472;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.detail-snapshot {
+  margin-top: 16px;
+}
+
+.detail-snapshot pre {
+  margin-top: 6px;
+  padding: 12px;
+  max-height: 220px;
+  overflow: auto;
+  background: #f8fbfd;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  color: #354d5d;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.detail-values {
+  margin-top: 16px;
+}
+
+.values-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.values-compare strong {
+  display: block;
+  color: #7b8f9c;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* Archive History — pagination footer (Laravel-style page metadata). */
+.archive-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.archive-pager-info {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.values-compare pre {
+  margin-top: 4px;
+  padding: 12px;
+  max-height: 220px;
+  overflow: auto;
+  background: #f8fbfd;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  color: #354d5d;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.muted-text {
+  color: #8ba0ad;
+  font-size: 10px;
+}
+
+@media (max-width: 760px) {
+  .archive-filters .filter-field {
+    min-width: 100%;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .values-compare {
+    grid-template-columns: 1fr;
+  }
+}
+
 .prt-status {
   display: inline-flex;
   align-items: center;

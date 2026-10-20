@@ -59,6 +59,9 @@ import {
   Edit3,
   MoreHorizontal,
   Plus,
+  Download,
+  Trash2,
+  Filter,
 } from "lucide-react";
 import LiveDashboard from "./components/LiveDashboard";
 import PesoCoinIcon from "./components/PesoCoinIcon";
@@ -686,6 +689,162 @@ const uploadContractDocumentViaApi = async (id, document) => {
     return payload.success ? payload.data : null;
   } catch (error) {
     console.error("Failed to upload contract document via API:", error);
+    return null;
+  }
+};
+
+// ============================================================
+// Archive Management — Archived Records API Helpers
+// ============================================================
+
+// GET /api/archived-records — list archived records across every module.
+const fetchArchivedRecordsFromApi = async (filters = {}) => {
+  try {
+    const params = new URLSearchParams();
+    if (filters.module && filters.module !== "All") params.append("module", filters.module);
+    if (filters.type && filters.type !== "All") params.append("type", filters.type);
+    if (filters.status && filters.status !== "All") params.append("status", filters.status);
+    if (filters.search) params.append("search", filters.search);
+    const qs = params.toString();
+    const response = await fetch(`${API_BASE}/api/archived-records${qs ? `?${qs}` : ""}`, {
+      headers: { Accept: "application/json" },
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return payload.success ? payload.data : null;
+  } catch (error) {
+    console.error("Failed to fetch archived records from API:", error);
+    return null;
+  }
+};
+
+// GET /api/archived-records/summary — module/type/status counts.
+const fetchArchivedRecordsSummaryFromApi = async () => {
+  try {
+    const response = await fetch(`${API_BASE}/api/archived-records/summary`, {
+      headers: { Accept: "application/json" },
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return payload.success ? payload.data : null;
+  } catch (error) {
+    console.error("Failed to fetch archived records summary from API:", error);
+    return null;
+  }
+};
+
+// POST /api/archived-records — archive a record from any module.
+const archiveRecordViaApi = async (record) => {
+  try {
+    const response = await fetch(`${API_BASE}/api/archived-records`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(record),
+    });
+    const payload = await response.json();
+    return payload.success ? payload.data : null;
+  } catch (error) {
+    console.error("Failed to archive record via API:", error);
+    return null;
+  }
+};
+
+// POST /api/archived-records/:archiveId/restore — restore a record to its module.
+const restoreArchivedRecordViaApi = async (archiveId) => {
+  try {
+    const response = await fetch(`${API_BASE}/api/archived-records/${encodeURIComponent(archiveId)}/restore`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const payload = await response.json();
+    return payload.success ? payload.data : null;
+  } catch (error) {
+    console.error("Failed to restore archived record via API:", error);
+    return null;
+  }
+};
+
+// POST /api/archived-records/:archiveId/schedule-deletion — mark for later purge.
+const scheduleArchivedRecordDeletionViaApi = async (archiveId) => {
+  try {
+    const response = await fetch(`${API_BASE}/api/archived-records/${encodeURIComponent(archiveId)}/schedule-deletion`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const payload = await response.json();
+    return payload.success ? payload.data : null;
+  } catch (error) {
+    console.error("Failed to schedule archived record deletion via API:", error);
+    return null;
+  }
+};
+
+// POST /api/archived-records/:archiveId/delete — remove the archive index entry.
+const deleteArchivedRecordViaApi = async (archiveId) => {
+  try {
+    const response = await fetch(`${API_BASE}/api/archived-records/${encodeURIComponent(archiveId)}/delete`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const payload = await response.json();
+    return Boolean(payload.success);
+  } catch (error) {
+    console.error("Failed to delete archived record via API:", error);
+    return false;
+  }
+};
+
+// ============================================================
+// Archive History API Helpers
+// ============================================================
+
+// Identify the signed-in user on archive actions so the backend audit log
+// records who performed each action instead of falling back to "System".
+const actorHeaders = () => {
+  try {
+    const session = JSON.parse(localStorage.getItem("primepower-session") || "null");
+    const user = session?.user || {};
+    const headers = {};
+    if (user.name) headers["X-Actor-Name"] = user.name;
+    if (user.role) headers["X-Actor-Role"] = user.role;
+    if (user.id) headers["X-Actor-Id"] = String(user.id);
+    return headers;
+  } catch (error) {
+    return {};
+  }
+};
+
+// GET /api/archive-history — audit entries with optional server-side filters
+// ({ action, result, module, from, to, search, page, per_page }). Returns the
+// full payload { data, current_page, last_page, total } for the pager.
+const fetchArchiveHistoryFromApi = async (filters = {}) => {
+  try {
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "" && value !== "All") {
+        params.append(key, value);
+      }
+    });
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const response = await fetch(`${API_BASE}/api/archive-history${query}`, { headers: { Accept: "application/json" } });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return payload.success ? payload : null;
+  } catch (error) {
+    console.error("Failed to fetch archive history from API:", error);
+    return null;
+  }
+};
+
+// GET /api/archive-history/summary — counts by action/result for KPI tiles.
+const fetchArchiveHistorySummaryFromApi = async () => {
+  try {
+    const response = await fetch(`${API_BASE}/api/archive-history/summary`, { headers: { Accept: "application/json" } });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return payload.success ? payload.data : null;
+  } catch (error) {
+    console.error("Failed to fetch archive history summary from API:", error);
     return null;
   }
 };
@@ -1334,8 +1493,8 @@ function App() {
         <ErrorBoundary label={activePage}>
         {activePage === "Dashboard" ? <Dashboard totalRevenue={totalRevenue} totalExpenses={totalExpenses} outstandingReceivables={outstandingReceivables} netCash={netCash} navigate={navigate} aiBudget={aiBudget} aiBudgetError={aiBudgetError} monthly={monthly} transactions={transactions} /> :
           activePage === "Client Contract Management" ? <ContractPage contracts={contractRecords} archivedContracts={archivedRecords} onNew={() => openNew("New Contract")} onArchive={archiveContract} onRestore={restoreContract} onUpload={saveDocument} onUpdateContract={updateContract} onRenewContract={renewContract} navigate={navigate} /> :
-          activePage === "Archived Records" ? <ArchivedPage records={archivedRecords} onRestore={restoreContract} search={search} /> :
-          activePage === "Archive History" ? <HistoryPage title="Archive History" rows={archiveHistory} /> :
+          activePage === "Archived Records" ? <ArchivedPage onRestored={() => { fetchContractsFromApi().then((apiContracts) => { if (apiContracts) setContractRecords(apiContracts); }); fetchArchivedContractsFromApi().then((apiArchived) => { if (apiArchived) setArchivedRecords(apiArchived); }); }} /> :
+          activePage === "Archive History" ? <ArchiveHistoryPage /> :
           activePage === "Audit Trail" ? <HistoryPage title="Audit Trail" rows={auditTrail} /> :
           activePage === "Notification History" ? <NotificationHistory notifications={notifications} setNotifications={setNotifications} /> :
           activePage === "User Permissions" ? <PermissionsPage permissions={permissions} setPermissions={setPermissions} /> :
@@ -7818,58 +7977,515 @@ function ReportContent({ page, onPrint, transactions }) {
   </div>;
 }
 
-function ArchivedPage({ records, onRestore, search }) {
-  const [revealedValues, setRevealedValues] = useState({});
+function ArchivedPage({ onRestored }) {
+  const [records, setRecords] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [moduleFilter, setModuleFilter] = useState("All");
+  const [typeFilter, setTypeFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [query, setQuery] = useState("");
+  const [detail, setDetail] = useState(null);
 
-  const toggleValue = (id) => {
-    setRevealedValues(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+  const MODULES = ["Contracts", "Billing", "Collections", "Accounts Payable", "Payroll", "Budget", "Tax", "Reports", "Expense"];
+  const TYPES = ["Contract", "Invoice", "Payment", "Receipt", "Financial Report", "Payroll", "Budget", "Tax", "Expense", "Other"];
+  const STATUSES = ["Archived", "Restored", "Scheduled for Deletion"];
+
+  const fmtDate = (value) => {
+    if (!value) return "—";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
   };
 
-  const filtered = records.filter(r => `${r.id} ${r.client} ${r.status}`.toLowerCase().includes(search.toLowerCase()));
+  const loadRecords = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [data, summaryRes] = await Promise.all([
+        fetch(`${API_BASE}/api/archived-records`, { headers: { Accept: "application/json" } }).then(r => r.json()),
+        fetch(`${API_BASE}/api/archived-records/summary`, { headers: { Accept: "application/json" } }).then(r => r.json()),
+      ]);
+      if (data.success) setRecords(data.data || []);
+      else setError(data.message || "Failed to load archived records.");
+      if (summaryRes.success) setSummary(summaryRes.data || null);
+    } catch (err) {
+      console.error("Failed to load archived records:", err);
+      setError("Could not reach the server. Showing any cached records.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadRecords(); }, []);
+
+  const handleRestore = async (record) => {
+    if (!window.confirm(`Restore ${record.recordName} (${record.recordId}) to its module?`)) return;
+    const result = await restoreArchivedRecordViaApi(record.archiveId);
+    if (result !== null) {
+      if (typeof onRestored === "function") onRestored();
+      await loadRecords();
+    } else {
+      window.alert("Failed to restore the record. Please try again.");
+    }
+  };
+
+  const handleScheduleDeletion = async (record) => {
+    if (!window.confirm(`Schedule ${record.recordName} (${record.recordId}) for deletion?`)) return;
+    const result = await scheduleArchivedRecordDeletionViaApi(record.archiveId);
+    if (result) await loadRecords();
+    else window.alert("Failed to schedule the record for deletion.");
+  };
+
+  const handleDelete = async (record) => {
+    if (!window.confirm(`Permanently remove the archive entry for ${record.recordName} (${record.recordId})?\n\nThe original financial record and its history are preserved.`)) return;
+    const ok = await deleteArchivedRecordViaApi(record.archiveId);
+    if (ok) await loadRecords();
+    else window.alert("Failed to delete the archived record.");
+  };
+
+  const handleDownload = (record) => {
+    const blob = new Blob([JSON.stringify(record, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${record.archiveId}-${(record.recordId || "record").replace(/[^a-zA-Z0-9_-]/g, "_")}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const filtered = records.filter(r => {
+    if (moduleFilter !== "All" && r.module !== moduleFilter) return false;
+    if (typeFilter !== "All" && r.recordType !== typeFilter) return false;
+    if (statusFilter !== "All" && r.status !== statusFilter) return false;
+    if (query) {
+      const hay = `${r.archiveId} ${r.recordId} ${r.recordName} ${r.recordType} ${r.module} ${r.department || ""} ${r.archivedBy || ""} ${r.reason || ""}`.toLowerCase();
+      if (!hay.includes(query.toLowerCase())) return false;
+    }
+    return true;
+  });
+
+  const statusClass = (status) => {
+    if (status === "Restored") return "contract-status active";
+    if (status === "Scheduled for Deletion") return "contract-status expired";
+    return "contract-status archived";
+  };
+
+  const totalArchived = summary
+    ? Object.values(summary.byStatus || {}).reduce((sum, n) => sum + n, 0) + (summary.archivedContracts || 0)
+    : records.length;
   return <section className="management-page">
     <Breadcrumb current="Archived Records" parent="Archive Management" />
-    <div className="management-header"><div><h2>Archived Records</h2><p>Search and restore archived contracts and financial records.</p></div><div className="management-actions"><button className="light-button" onClick={() => window.location.reload()}><RotateCcw size={15}/> Refresh</button></div></div>
-    <div className="table-card"><table><thead><tr>
-      <th>Record ID</th>
-      <th>Client</th>
-      <th>
-        Value
-      </th>
-      <th>Original End Date</th>
-      <th>Archived By</th>
-      <th>Archived At</th>
-      <th>Action</th>
-    </tr></thead><tbody>
-      {filtered.length ? filtered.map(r => {
-        const isRevealed = Boolean(revealedValues[r.id]);
-        return <tr key={r.id}>
-          <td className="link-cell">{r.id}</td>
-          <td className="strong-cell"><RevealableText value={r.client} /></td>
-          <td className="money-cell">
-            <button
-              type="button"
-              className={`contract-value-button ${isRevealed ? "revealed" : "masked"}`}
-              onClick={() => toggleValue(r.id)}
-              title={isRevealed ? "Click to hide value" : "Click to view value"}
-            >
-              <span>{isRevealed ? money(r.value) : "*"}</span>
-              <span className="contract-value-icon">
-                {isRevealed ? <EyeOff size={12} /> : <Eye size={12} />}
-              </span>
-            </button>
-          </td>
-          <td>{r.end}</td>
-          <td><RevealableText value={r.archivedBy || "Admin User"} /></td>
-          <td>{r.archivedAt || "—"}</td>
-          <td><button className="restore-button" onClick={() => onRestore(r)}><ArchiveRestore size={15}/> Restore</button></td>
-        </tr>;
-      }) : <tr><td colSpan="7" className="empty">No archived records found.</td></tr>}
-    </tbody></table></div>
+    <div className="management-header">
+      <div>
+        <h2>Archived Records</h2>
+        <p>A centralized archive of contracts, billing, collections, accounts payable, payroll, budgets, taxes and financial reports retained for auditing, compliance and recovery.</p>
+      </div>
+      <div className="management-actions">
+        <button className="light-button" onClick={loadRecords}><RotateCcw size={15} /> Refresh</button>
+      </div>
+    </div>
+
+    <div className="stats four">
+      <div className="stat-card-new"><span className="stat-label">Total Archived</span><span className="stat-amount"><RevealableAmount value={String(totalArchived)} /></span></div>
+      <div className="stat-card-new"><span className="stat-label">Archived</span><span className="stat-amount"><RevealableAmount value={String((summary?.byStatus || {}).Archived || 0)} /></span></div>
+      <div className="stat-card-new"><span className="stat-label">Restored</span><span className="stat-amount"><RevealableAmount value={String((summary?.byStatus || {}).Restored || 0)} /></span></div>
+      <div className="stat-card-new"><span className="stat-label">Scheduled for Deletion</span><span className="stat-amount"><RevealableAmount value={String((summary?.byStatus || {})["Scheduled for Deletion"] || 0)} /></span></div>
+    </div>
+
+    <div className="archive-filters">
+      <div className="filter-field">
+        <label>Module</label>
+        <select value={moduleFilter} onChange={e => setModuleFilter(e.target.value)}>
+          <option value="All">All Modules</option>
+          {MODULES.map(m => <option key={m} value={m}>{m}</option>)}
+        </select>
+      </div>
+      <div className="filter-field">
+        <label>Record Type</label>
+        <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
+          <option value="All">All Types</option>
+          {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+        </select>
+      </div>
+      <div className="filter-field">
+        <label>Status</label>
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+          <option value="All">All Statuses</option>
+          {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </div>
+      <div className="filter-field filter-search">
+        <label>Search</label>
+        <div className="search-box"><span><Search size={14} /></span><input placeholder="Search records..." value={query} onChange={e => setQuery(e.target.value)} /></div>
+      </div>
+    </div>
+
+    {error && <div className="empty" style={{ marginBottom: 12 }}>{error}</div>}
+
+    <div className="table-card">
+      <table>
+        <thead><tr>
+          <th>Archive ID</th>
+          <th>Record ID</th>
+          <th>Record Name</th>
+          <th>Record Type</th>
+          <th>Module</th>
+          <th>Department</th>
+          <th>Amount</th>
+          <th>Original Date</th>
+          <th>Archive Date</th>
+          <th>Archived By</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr></thead>
+        <tbody>
+          {loading ? (
+            <tr><td colSpan="12" className="empty">Loading archived records...</td></tr>
+          ) : filtered.length ? filtered.map(r => (
+            <tr key={`${r.module}-${r.archiveId}`}>
+              <td className="link-cell">{r.archiveId}</td>
+              <td><RevealableText value={r.recordId} /></td>
+              <td className="strong-cell">{r.recordName}</td>
+              <td>{r.recordType}</td>
+              <td>{r.module}</td>
+              <td><RevealableText value={r.department || "—"} /></td>
+              <td className="money-cell">{r.amount === null || r.amount === undefined ? "—" : <RevealableAmount value={money(r.amount)} />}</td>
+              <td>{fmtDate(r.originalDate)}</td>
+              <td>{fmtDate(r.archiveDate)}</td>
+              <td><RevealableText value={r.archivedBy || "System"} /></td>
+              <td><span className={statusClass(r.status)}>{r.status}</span></td>
+              <td>
+                <div className="row-actions">
+                  <button className="icon-button" title="View details" onClick={() => setDetail(r)}><Eye size={15} /></button>
+                  <button className="icon-button" title="Download" onClick={() => handleDownload(r)}><Download size={15} /></button>
+                  <button className="icon-button" title="Restore" disabled={r.status !== "Archived"} onClick={() => handleRestore(r)}><ArchiveRestore size={15} /></button>
+                  <button className="icon-button" title="Schedule for deletion" disabled={r.status === "Scheduled for Deletion"} onClick={() => handleScheduleDeletion(r)}><Clock3 size={15} /></button>
+                  <button className="icon-button danger" title="Delete archive entry" onClick={() => handleDelete(r)}><Trash2 size={15} /></button>
+                </div>
+              </td>
+            </tr>
+          )) : (
+            <tr><td colSpan="12" className="empty">No archived records found.</td></tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+
+    {detail && (
+      <div className="modal-overlay" onClick={() => setDetail(null)}>
+        <div className="modal archive-modal" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <h3>{detail.recordName}</h3>
+            <button className="icon-button" title="Close" onClick={() => setDetail(null)}><X size={16} /></button>
+          </div>
+          <div className="modal-body">
+            <div className="detail-grid">
+              <div><span className="detail-label">Archive ID</span><span>{detail.archiveId}</span></div>
+              <div><span className="detail-label">Record ID</span><span>{detail.recordId}</span></div>
+              <div><span className="detail-label">Record Type</span><span>{detail.recordType}</span></div>
+              <div><span className="detail-label">Module</span><span>{detail.module}</span></div>
+              <div><span className="detail-label">Department</span><span>{detail.department || "—"}</span></div>
+              <div><span className="detail-label">Amount</span><span>{detail.amount === null || detail.amount === undefined ? "—" : money(detail.amount)}</span></div>
+              <div><span className="detail-label">Original Date</span><span>{fmtDate(detail.originalDate)}</span></div>
+              <div><span className="detail-label">Archive Date</span><span>{fmtDate(detail.archiveDate)}</span></div>
+              <div><span className="detail-label">Archived By</span><span>{detail.archivedBy || "System"}</span></div>
+              <div><span className="detail-label">Status</span><span>{detail.status}</span></div>
+            </div>
+            <div className="detail-reason">
+              <span className="detail-label">Reason</span>
+              <p>{detail.reason || "—"}</p>
+            </div>
+            {detail.snapshot && Object.keys(detail.snapshot).length > 0 && (
+              <div className="detail-snapshot">
+                <span className="detail-label">Snapshot</span>
+                <pre>{JSON.stringify(detail.snapshot, null, 2)}</pre>
+              </div>
+            )}
+          </div>
+          <div className="modal-footer">
+            <button className="light-button" onClick={() => handleDownload(detail)}><Download size={15} /> Download</button>
+            <button className="light-button" onClick={() => setDetail(null)}>Close</button>
+          </div>
+        </div>
+      </div>
+    )}
   </section>;
 }
+
+// ============================================================
+// Archive History — read-only audit trail for Archive Management.
+// Every archived / viewed / restored / updated / deletion-attempted event is
+// stored in the backend archive_history table; this page reads it live and
+// supports filters by action, result, module and date range plus a CSV export
+// that deliberately excludes sensitive payroll and financial amounts.
+function ArchiveHistoryPage() {
+  const [entries, setEntries] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [actionFilter, setActionFilter] = useState("All");
+  const [resultFilter, setResultFilter] = useState("All");
+  const [moduleFilter, setModuleFilter] = useState("All");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [query, setQuery] = useState("");
+  const [detail, setDetail] = useState(null);
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [total, setTotal] = useState(0);
+
+  const MODULES = ["Contracts", "Billing", "Collections", "Accounts Payable", "Payroll", "Budget", "Tax", "Reports", "Expense"];
+  const BASE_ACTIONS = ["Archived", "Viewed", "Restored", "Updated", "Deletion Attempted"];
+  const BASE_RESULTS = ["Success", "Failed", "Denied"];
+
+  const currentFilters = () => ({
+    action: actionFilter,
+    result: resultFilter,
+    module: moduleFilter,
+    from: fromDate,
+    to: toDate,
+    search: query,
+    page,
+  });
+
+  const fmtDateTime = (value) => {
+    if (!value) return "—";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  };
+
+  const loadHistory = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [rows, sum] = await Promise.all([
+        fetchArchiveHistoryFromApi(currentFilters()),
+        fetchArchiveHistorySummaryFromApi(),
+      ]);
+      if (rows) {
+        // Payload is Laravel-style: { data, current_page, last_page, total }.
+        setEntries(Array.isArray(rows.data) ? rows.data : []);
+        setLastPage(rows.last_page || 1);
+        setTotal(rows.total || 0);
+      } else setError("Failed to load archive history from the server.");
+      if (sum) setSummary(sum);
+    } catch (err) {
+      console.error("Failed to load archive history:", err);
+      setError("Could not reach the server.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Server-side filtering: reload whenever a filter, search text or page changes.
+  // Typing in search is debounced so each keystroke does not hit the API, and any
+  // filter change resets to page 1 so the user never lands on an empty page.
+  useEffect(() => {
+    const timer = setTimeout(loadHistory, query ? 300 : 0);
+    return () => clearTimeout(timer);
+  }, [actionFilter, resultFilter, moduleFilter, fromDate, toDate, query, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [actionFilter, resultFilter, moduleFilter, fromDate, toDate, query]);
+
+  const handleExport = () => {
+    const params = new URLSearchParams();
+    Object.entries(currentFilters()).forEach(([key, value]) => {
+      if (value && value !== "All") params.append(key, value);
+    });
+    const qs = params.toString() ? `?${params.toString()}` : "";
+    window.open(`${API_BASE}/api/archive-history/export${qs}`, "_blank");
+  };
+
+  const actionOptions = [...new Set([...BASE_ACTIONS, ...Object.keys(summary?.byAction || {})])];
+  const resultOptions = [...new Set([...BASE_RESULTS, ...Object.keys(summary?.byResult || {})])];
+
+  const actionClass = (action) => {
+    if (action === "Restored" || action === "Viewed") return "contract-status active";
+    if (action === "Deletion Attempted") return "contract-status expired";
+    return "contract-status archived";
+  };
+
+  const resultClass = (result) => {
+    if (result === "Success") return "contract-status active";
+    if (result === "Failed") return "contract-status expired";
+    return "contract-status archived";
+  };
+
+  const totalEvents = summary
+    ? Object.values(summary.byResult || {}).reduce((sum, n) => sum + n, 0)
+    : entries.length;
+  return <section className="management-page">
+    <Breadcrumb current="Archive History" parent="Archive Management" />
+    <div className="management-header">
+      <div>
+        <h2>Archive History</h2>
+        <p>Audit trail of every action performed on archived financial records — who archived, viewed, restored, updated or attempted to delete a record, and when.</p>
+      </div>
+      <div className="management-actions">
+        <button className="light-button" onClick={handleExport}><Download size={15} /> Export CSV</button>
+        <button className="light-button" onClick={loadHistory}><RotateCcw size={15} /> Refresh</button>
+      </div>
+    </div>
+
+    <div className="stats four">
+      <div className="stat-card-new"><span className="stat-label">Total Events</span><span className="stat-amount"><RevealableAmount value={String(totalEvents)} /></span></div>
+      <div className="stat-card-new"><span className="stat-label">Success</span><span className="stat-amount"><RevealableAmount value={String((summary?.byResult || {}).Success || 0)} /></span></div>
+      <div className="stat-card-new"><span className="stat-label">Failed</span><span className="stat-amount"><RevealableAmount value={String((summary?.byResult || {}).Failed || 0)} /></span></div>
+      <div className="stat-card-new"><span className="stat-label">Denied</span><span className="stat-amount"><RevealableAmount value={String((summary?.byResult || {}).Denied || 0)} /></span></div>
+    </div>
+
+    <div className="archive-filters">
+      <div className="filter-field">
+        <label>Action</label>
+        <select value={actionFilter} onChange={e => setActionFilter(e.target.value)}>
+          <option value="All">All Actions</option>
+          {actionOptions.map(a => <option key={a} value={a}>{a}</option>)}
+        </select>
+      </div>
+      <div className="filter-field">
+        <label>Result</label>
+        <select value={resultFilter} onChange={e => setResultFilter(e.target.value)}>
+          <option value="All">All Results</option>
+          {resultOptions.map(r => <option key={r} value={r}>{r}</option>)}
+        </select>
+      </div>
+      <div className="filter-field">
+        <label>Module</label>
+        <select value={moduleFilter} onChange={e => setModuleFilter(e.target.value)}>
+          <option value="All">All Modules</option>
+          {MODULES.map(m => <option key={m} value={m}>{m}</option>)}
+        </select>
+      </div>
+      <div className="filter-field">
+        <label>From</label>
+        <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
+      </div>
+      <div className="filter-field">
+        <label>To</label>
+        <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
+      </div>
+      <div className="filter-field filter-search">
+        <label>Search</label>
+        <div className="search-box"><span><Search size={14} /></span><input placeholder="Search log, record, user..." value={query} onChange={e => setQuery(e.target.value)} /></div>
+      </div>
+    </div>
+
+    {error && <div className="empty" style={{ marginBottom: 12 }}>{error}</div>}
+    <div className="table-card">
+      <table>
+        <thead><tr>
+          <th>Log ID</th>
+          <th>Archive ID</th>
+          <th>Record Name</th>
+          <th>Record Type</th>
+          <th>Action</th>
+          <th>Performed By</th>
+          <th>Date and Time</th>
+          <th>Reason</th>
+          <th>Result</th>
+          <th>Details</th>
+        </tr></thead>
+        <tbody>
+          {loading ? (
+            <tr><td colSpan="10" className="empty">Loading archive history...</td></tr>
+          ) : entries.length ? entries.map(e => (
+            <tr key={e.logId}>
+              <td className="link-cell">{e.logId}</td>
+              <td>{e.archiveId || "—"}</td>
+              <td className="strong-cell">{e.recordName || "—"}</td>
+              <td>{e.recordType || "—"}</td>
+              <td><span className={actionClass(e.action)}>{e.action}</span></td>
+              <td><RevealableText value={e.performedBy || "System"} />{e.role ? <small className="muted-text"> ({e.role})</small> : null}</td>
+              <td>{fmtDateTime(e.createdAt)}</td>
+              <td>{e.reason || "—"}</td>
+              <td><span className={resultClass(e.result)}>{e.result}</span></td>
+              <td><button className="icon-button" title="View audit details" onClick={() => setDetail(e)}><Eye size={15} /></button></td>
+            </tr>
+          )) : (
+            <tr><td colSpan="10" className="empty">No archive history entries found.</td></tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+
+    <div className="archive-pager">
+      <button
+        className="light-button"
+        disabled={page <= 1 || loading}
+        onClick={() => setPage(p => Math.max(1, p - 1))}
+      >
+        Previous
+      </button>
+      <span className="archive-pager-info">
+        Page {page} of {lastPage} · {total} {total === 1 ? "entry" : "entries"}
+      </span>
+      <button
+        className="light-button"
+        disabled={page >= lastPage || loading}
+        onClick={() => setPage(p => p + 1)}
+      >
+        Next
+      </button>
+    </div>
+
+    {detail && (
+      <div className="modal-overlay" onClick={() => setDetail(null)}>
+        <div className="modal archive-modal" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <h3>Audit Entry {detail.logId}</h3>
+            <button className="icon-button" title="Close" onClick={() => setDetail(null)}><X size={16} /></button>
+          </div>
+          <div className="modal-body">
+            <div className="detail-grid">
+              <div><span className="detail-label">Log ID</span><span>{detail.logId}</span></div>
+              <div><span className="detail-label">Archive ID</span><span>{detail.archiveId || "—"}</span></div>
+              <div><span className="detail-label">Record Name</span><span>{detail.recordName || "—"}</span></div>
+              <div><span className="detail-label">Record Type</span><span>{detail.recordType || "—"}</span></div>
+              <div><span className="detail-label">Module</span><span>{detail.module || "—"}</span></div>
+              <div><span className="detail-label">Action</span><span>{detail.action}</span></div>
+              <div><span className="detail-label">Performed By</span><span>{detail.performedBy || "System"}</span></div>
+              <div><span className="detail-label">Role</span><span>{detail.role || "—"}</span></div>
+              <div><span className="detail-label">User ID</span><span>{detail.userId || "—"}</span></div>
+              <div><span className="detail-label">IP Address</span><span>{detail.ipAddress || "—"}</span></div>
+              <div><span className="detail-label">Date and Time</span><span>{fmtDateTime(detail.createdAt)}</span></div>
+              <div><span className="detail-label">Result</span><span>{detail.result}</span></div>
+            </div>
+            <div className="detail-reason">
+              <span className="detail-label">Reason / Description</span>
+              <p>{detail.reason || detail.description || "—"}</p>
+            </div>
+            {(detail.oldValues && Object.keys(detail.oldValues).length > 0) || (detail.newValues && Object.keys(detail.newValues).length > 0) ? (
+              <div className="detail-values">
+                <span className="detail-label">Changes</span>
+                <div className="values-compare">
+                  <div>
+                    <strong>Before</strong>
+                    <pre>{JSON.stringify(detail.oldValues || {}, null, 2)}</pre>
+                  </div>
+                  <div>
+                    <strong>After</strong>
+                    <pre>{JSON.stringify(detail.newValues || {}, null, 2)}</pre>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+          <div className="modal-footer">
+            <button className="light-button" onClick={() => setDetail(null)}>Close</button>
+          </div>
+        </div>
+      </div>
+    )}
+  </section>;
+}
+
 
 function HistoryPage({ title, rows }) {
   return <section className="management-page"><Breadcrumb current={title} parent="System Management" /><div className="management-header"><div><h2>{title}</h2><p>{descriptions[title]}</p></div></div><div className="table-card"><table><thead><tr><th>Date</th><th>Action</th><th>Record</th><th>Client / Details</th><th>User</th></tr></thead><tbody>{rows.length ? rows.map(r => <tr key={r.id}><td>{r.date}</td><td><span className="contract-status active">{r.action}</span></td><td className="link-cell"><RevealableText value={r.record} /></td><td><RevealableText value={r.client || "—"} /></td><td><RevealableText value={r.user} /></td></tr>) : <tr><td colSpan="5" className="empty">No history records found.</td></tr>}</tbody></table></div></section>;
